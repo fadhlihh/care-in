@@ -1,18 +1,14 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {Actions} from 'react-native-router-flux';
-import {Container, Button, Content, Text, Header} from 'native-base';
+import { StyleSheet } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { Container, Button, Content, Text, Header } from 'native-base';
 
 const Home = () => {
   const styles = StyleSheet.create({
     container: {
       paddingHorizontal: 16,
-      paddingVertical: 8,
-    },
-    button: {
-      width: 100,
-      marginBottom: 8,
-    },
+      paddingVertical: 8
+    }
   });
 
   const goToLogin = () => {
@@ -27,10 +23,10 @@ const Home = () => {
         <Text>Home</Text>
       </Header>
       <Content>
-        <Button onPress={goToLogin} style={styles.button}>
+        <Button onPress={goToLogin}>
           <Text>Login</Text>
         </Button>
-        <Button bordered onPress={goToRegister} style={styles.button}>
+        <Button bordered onPress={goToRegister}>
           <Text>Register</Text>
         </Button>
       </Content>

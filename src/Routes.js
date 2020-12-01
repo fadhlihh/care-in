@@ -13,7 +13,7 @@ import { BottomNavigation } from './component';
 const Routes = () => (
   <Router>
     <Scene key="root">
-      <Scene key="login" component={Login} title="Login" />
+      <Scene key="login" component={Login} title="Login" initial />
       <Tabs key="home" tabBarComponent={BottomNavigation} hideNavBar>
         <Scene
           key="order"
@@ -21,7 +21,6 @@ const Routes = () => (
           title="Home"
           iconName="home"
           hideNavBar
-          initial
         />
         <Scene
           key="history"
@@ -66,4 +65,5 @@ const Routes = () => (
     </Scene>
   </Router>
 );
+
 export default Routes;

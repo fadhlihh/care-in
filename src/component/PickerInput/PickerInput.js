@@ -4,7 +4,9 @@ import { Picker, Label, Item } from 'native-base';
 
 const propTypes = {
   label: PropTypes.string,
-  data: PropTypes.arrayOf(PropTypes.object).isRequired
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onValueChange: PropTypes.func.isRequired,
+  selectedValue: PropTypes.any.isRequired
 };
 
 const defaultProps = {
@@ -12,13 +14,7 @@ const defaultProps = {
 };
 
 const StyledPickerInput = (props) => {
-  const { label, data, ...rest } = props;
-
-  const [selected, setSelected] = useState(undefined);
-
-  const handleChange = (newValue) => {
-    setSelected(newValue);
-  };
+  const { label, data, selectedValue, onValueChange, ...rest } = props;
 
   const renderItems = () =>
     data.map((item, index) => (
@@ -35,8 +31,8 @@ const StyledPickerInput = (props) => {
         placeholder="Pilih jenis kelamin"
         placeholderStyle={{ color: '#bfc6ea' }}
         placeholderIconColor="#007aff"
-        selectedValue={selected}
-        onValueChange={handleChange}
+        selectedValue={selectedValue}
+        onValueChange={onValueChange}
       >
         {renderItems()}
       </Picker>

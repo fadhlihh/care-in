@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Text, View, Button } from 'native-base';
 import TextInput from '../TextInput';
@@ -8,20 +8,33 @@ const propTypes = {
   firstLabel: PropTypes.string,
   secondLabel: PropTypes.string,
   minRows: PropTypes.number,
-  maxRows: PropTypes.number
+  maxRows: PropTypes.number,
+  onValueChange: PropTypes.func
 };
 
 const defaultProps = {
   firstLabel: 'Label One',
   secondLabel: 'Label Two',
   minRows: 2,
-  maxRows: 5
+  maxRows: 5,
+  onValueChange: () => {}
 };
 
 const PairInputText = (props) => {
-  const { firstLabel, secondLabel, minRows, maxRows, ...rest } = props;
+  const {
+    firstLabel,
+    secondLabel,
+    minRows,
+    maxRows,
+    onValueChange,
+    ...rest
+  } = props;
 
   const [inputList, setInputList] = useState([{ valueOne: '', valueTwo: '' }]);
+
+  useEffect(() => {
+    onValueChange(inputList);
+  }, [inputList]);
 
   const handleInputChange = (index, name, newValue) => {
     const list = [...inputList];
@@ -47,15 +60,14 @@ const PairInputText = (props) => {
             <TextInput
               label={firstLabel}
               onChangeText={(newValue) =>
-                handleInputChange(index, 'valueOne', newValue)
-              }
+                handleInputChange(index, 'valueOne', newValue)}
               value={list.valueOne}
+              keyboardType="numeric"
             />
             <TextInput
               label={secondLabel}
               onChangeText={(newValue) =>
-                handleInputChange(index, 'valueTwo', newValue)
-              }
+                handleInputChange(index, 'valueTwo', newValue)}
               value={list.valueTwo}
             />
             <View style={styles.buttonContainer}>
@@ -64,7 +76,7 @@ const PairInputText = (props) => {
                   <Text>Remove</Text>
                 </Button>
               )}
-              {inputList.length < maxRows && (
+              {inputList.length < maxRows && index === inputList.length - 1 && (
                 <Button onPress={handleAddClick}>
                   <Text>Add</Text>
                 </Button>

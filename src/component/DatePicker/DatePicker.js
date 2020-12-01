@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { DatePicker, Label, Item } from 'native-base';
 
 const propTypes = {
-  label: PropTypes.string
+  label: PropTypes.string,
+  onDateChange: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -11,9 +12,7 @@ const defaultProps = {
 };
 
 const StyledDatePicker = (props) => {
-  const { label, ...rest } = props;
-
-  const [chosenDate, setChosenDate] = useState(new Date(1999, 1, 1));
+  const { label, onDateChange, ...rest } = props;
 
   return (
     <Item stackedLabel>
@@ -27,7 +26,7 @@ const StyledDatePicker = (props) => {
         placeHolderText="Pilih tanggal"
         textStyle={{ color: 'green' }}
         placeHolderTextStyle={{ color: '#000' }}
-        onDateChange={setChosenDate}
+        onDateChange={onDateChange}
       />
     </Item>
   );

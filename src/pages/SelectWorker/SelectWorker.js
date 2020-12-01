@@ -1,12 +1,16 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Container, Content } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import Geolocation from '@react-native-community/geolocation';
+import { connect } from 'react-redux';
 import { CardWorker } from './components';
-import { Header } from '../../component';
+import { Header } from '../../components';
 import styles from './styles';
 
-const propTypes = {};
+const propTypes = {
+  token: PropTypes.string.isRequired
+};
 
 const defaultProps = {};
 
@@ -56,7 +60,7 @@ const mockData = [
 ];
 
 const SelectWorker = (props) => {
-  const { workerType } = props;
+  const { token } = props;
 
   useEffect(() => {
     Geolocation.getCurrentPosition((info) => console.log(info));
@@ -89,6 +93,13 @@ const SelectWorker = (props) => {
   );
 };
 
+SelectWorker.propTypes = propTypes;
 SelectWorker.defaultProps = defaultProps;
 
-export default SelectWorker;
+const mapStateToProps = (state) => {
+  return {
+    token: state.token
+  };
+};
+
+export default connect(mapStateToProps)(SelectWorker);

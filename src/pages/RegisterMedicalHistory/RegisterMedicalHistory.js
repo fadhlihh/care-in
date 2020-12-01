@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
-import { Form, Button, Text } from 'native-base';
+import { Container, Content, Form, Button, Text, Toast } from 'native-base';
 import { validate } from 'validate.js';
 import { Actions } from 'react-native-router-flux';
-import { PickerInput, TextInput, PairInputText } from '../../component';
+import {
+  Header,
+  PickerInput,
+  TextInput,
+  PairInputText
+} from '../../components';
 import API from '../../services';
 import styles from './styles';
 import schema from './schema';
-import { getShortDate } from '../../util';
+import { DateFormatter } from '../../helpers';
 
 const propTypes = {
   registerData: PropTypes.objectOf(PropTypes.any).isRequired
@@ -37,8 +41,6 @@ const RegisterMedicalHistory = (props) => {
   ];
 
   useEffect(() => {
-    console.log(formState.values);
-    console.log(formState.errors);
     const errors = validate(formState.values, schema);
 
     setFormState(() => ({
@@ -48,23 +50,30 @@ const RegisterMedicalHistory = (props) => {
     }));
   }, [formState.values]);
 
-  const goToLogin = () => {
-    // Actions.login();
+  const backToRegister = () => {
+    Actions.pop();
   };
 
-  const postDataToAPI = () => {
-    const data = {};
+  const goToLogin = () => {
+    Actions.login();
+  };
 
-    API.postRegister(data).then((res) => {
-      console.log('==================================', res);
-    });
+  const handleSubmit = () => {
+    API.postRegister(formState.values)
+      .then((res) => {
+        Toast.show({ text: res.message, duration: 3000 });
+        setTimeout(() => goToLogin(), 3000);
+      })
+      .catch((error) => {
+        Toast.show({ text: error.response.data.message, duration: 3000 });
+      });
   };
 
   const hasError = (field) =>
     !!(formState.touched[field] && formState.errors[field]);
 
   const parseYearToDate = (year) =>
-    getShortDate(new Date(parseInt(year, 10), 0, 1));
+    DateFormatter.getShortDate(new Date(parseInt(year, 10), 1, 1));
 
   const parsePairInputData = (data) =>
     data.map((item) => {
@@ -99,43 +108,51 @@ const RegisterMedicalHistory = (props) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Form>
-        <TextInput
-          label="Berat Badan"
-          onChangeText={(newValue) => handleChange('beratBadan', newValue)}
-          alertText={
-            hasError('beratBadan') ? formState.errors.beratBadan[0] : null
-          }
-          keyboardType="numeric"
-        />
-        <TextInput
-          label="Tinggi Badan"
-          onChangeText={(newValue) => handleChange('tinggiBadan', newValue)}
-          alertText={
-            hasError('tinggiBadan') ? formState.errors.tinggiBadan[0] : null
-          }
-          keyboardType="numeric"
-        />
-        <PickerInput
-          label="Golongan Darah"
-          data={bloodType}
-          onValueChange={(newValue) => handleChange('goldar', newValue)}
-          selectedValue={formState.values.goldar}
-        />
-        <PairInputText
-          firstLabel="Tahun"
-          secondLabel="Nama Penyakit"
-          onValueChange={saveValuesPairInput}
-        />
-        <Button full onPress={goToLogin}>
-          <Text>Submit</Text>
-        </Button>
-      </Form>
-    </ScrollView>
+    <Container>
+      <Header
+        iconName="add"
+        title="Riwayat Kesehatan"
+        onPress={backToRegister}
+      />
+      <Content style={styles.container}>
+        <Form>
+          <TextInput
+            label="Berat Badan"
+            onChangeText={(newValue) => handleChange('beratBadan', newValue)}
+            alertText={
+              hasError('beratBadan') ? formState.errors.beratBadan[0] : null
+            }
+            keyboardType="numeric"
+          />
+          <TextInput
+            label="Tinggi Badan"
+            onChangeText={(newValue) => handleChange('tinggiBadan', newValue)}
+            alertText={
+              hasError('tinggiBadan') ? formState.errors.tinggiBadan[0] : null
+            }
+            keyboardType="numeric"
+          />
+          <PickerInput
+            label="Golongan Darah"
+            data={bloodType}
+            onValueChange={(newValue) => handleChange('goldar', newValue)}
+            selectedValue={formState.values.goldar}
+          />
+          <PairInputText
+            firstLabel="Tahun"
+            secondLabel="Nama Penyakit"
+            onValueChange={saveValuesPairInput}
+          />
+          <Button full onPress={handleSubmit} disabled={!formState.isValid}>
+            <Text>Submit</Text>
+          </Button>
+        </Form>
+      </Content>
+    </Container>
   );
 };
 
+RegisterMedicalHistory.propTypes = propTypes;
 RegisterMedicalHistory.defaultProps = defaultProps;
 
 export default RegisterMedicalHistory;

@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import { Container, Content, Text, Footer, Button, View } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import { Header } from '../../component';
+import { Header } from '../../components';
 import styles from './styles';
 
 const propTypes = {};
@@ -67,7 +67,8 @@ const Checkout = (props) => {
                   edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
                   animated: true
                 }
-              )}
+              )
+            }
           >
             <Marker
               coordinate={{

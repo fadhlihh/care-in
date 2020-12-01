@@ -6,9 +6,10 @@ import {
   Register,
   RegisterMedicalHistory,
   SelectWorker,
-  Checkout
+  Checkout,
+  Chat
 } from './pages';
-import { BottomNavigation } from './component';
+import { BottomNavigation } from './components';
 
 const Routes = () => (
   <Router>
@@ -44,7 +45,6 @@ const Routes = () => (
           hideNavBar
         />
       </Tabs>
-      <Scene key="register" component={Register} title="Register" />
       <Scene
         key="selectWorker"
         component={SelectWorker}
@@ -57,11 +57,14 @@ const Routes = () => (
         title="Pembayaran"
         hideNavBar
       />
+      <Scene key="register" component={Register} title="Register" hideNavBar />
       <Scene
         key="registerMedicalHistory"
         component={RegisterMedicalHistory}
         title="Riwayat Kesehatan"
+        hideNavBar
       />
+      <Scene key="chat" component={Chat} title="Obrolan" hideNavBar />
     </Scene>
   </Router>
 );

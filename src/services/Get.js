@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { BASE_URL } from 'react-native-dotenv';
 
-const Get = (path) => {
+const get = (path, config) => {
   const promise = new Promise((resolve, reject) => {
-    axios.get(`${BASE_URL}/${path}`).then(
+    axios.get(`${BASE_URL}/${path}`, config).then(
       (result) => {
         resolve(result.data);
       },
@@ -16,4 +16,4 @@ const Get = (path) => {
   return promise;
 };
 
-export default Get;
+export default get;

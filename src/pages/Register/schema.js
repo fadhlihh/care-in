@@ -1,16 +1,16 @@
-import { REGEX } from '../../util';
+import { Regex } from '../../helpers';
 
 module.exports = {
   nama: {
     presence: { allowEmpty: false },
     format: {
-      pattern: REGEX.alphabetWithSpace
+      pattern: Regex.alphabetWithSpace
     }
   },
   tempatLahir: {
     presence: { allowEmpty: false },
     format: {
-      pattern: REGEX.alphabetWithSpace
+      pattern: Regex.alphabetWithSpace
     }
   },
   tglLahir: {
@@ -19,7 +19,7 @@ module.exports = {
   noTelp: {
     presence: { allowEmpty: false },
     format: {
-      pattern: REGEX.numberOnly
+      pattern: Regex.numberOnly
     },
     length: {
       maximum: 15
@@ -34,7 +34,7 @@ module.exports = {
   username: {
     presence: { allowEmpty: false },
     format: {
-      pattern: REGEX.username
+      pattern: Regex.username
     },
     length: {
       minimum: 3,

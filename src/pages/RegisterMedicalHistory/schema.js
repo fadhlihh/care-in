@@ -1,23 +1,23 @@
-import { REGEX } from '../../util';
+import { Regex } from '../../helpers';
 
 module.exports = {
   beratBadan: {
     presence: { allowEmpty: false },
     format: {
-      pattern: REGEX.decimal
+      pattern: Regex.decimal
     }
   },
   tinggiBadan: {
     presence: { allowEmpty: false },
     format: {
-      pattern: REGEX.decimal
+      pattern: Regex.decimal
     },
     numericality: { notGreaterThan: 1000 }
   },
   goldar: {
     presence: { allowEmpty: false },
     format: {
-      pattern: REGEX.alphabetLowerCaseOnly
+      pattern: Regex.alphabetLowerCaseOnly
     },
     length: {
       maximum: 2

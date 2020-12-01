@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { StatusBar, View } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
+import { Root } from 'native-base';
+import { Provider } from 'react-redux';
 import Routes from './Routes';
+import { store } from './helpers';
 
 const App = () => {
   useEffect(() => {
@@ -9,10 +12,14 @@ const App = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
-      <StatusBar barStyle="light-content" backgroundColor="#2a83be" />
-      <Routes />
-    </View>
+    <Provider store={store}>
+      <View style={{ flex: 1 }}>
+        <StatusBar barStyle="light-content" backgroundColor="#2a83be" />
+        <Root>
+          <Routes />
+        </Root>
+      </View>
+    </Provider>
   );
 };
 export default App;

@@ -1,35 +1,36 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { View } from 'react-native';
+import { Container } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { Container, Button, Content, Text, Header } from 'native-base';
+import { Header, CardMenu } from './components';
+import styles from './styles';
 
-const Home = () => {
-  const styles = StyleSheet.create({
-    container: {
-      paddingHorizontal: 16,
-      paddingVertical: 8
-    }
-  });
+const Home = (props) => {
+  const goToSelectWorker = (workerType) => {
+    Actions.selectWorker(workerType);
+  };
 
-  const goToLogin = () => {
-    Actions.login();
-  };
-  const goToRegister = () => {
-    Actions.register();
-  };
   return (
-    <Container style={styles.container}>
-      <Header>
-        <Text>Home</Text>
-      </Header>
-      <Content>
-        <Button onPress={goToLogin}>
-          <Text>Login</Text>
-        </Button>
-        <Button bordered onPress={goToRegister}>
-          <Text>Register</Text>
-        </Button>
-      </Content>
+    <Container>
+      <Header />
+      <View style={styles.cardContainer}>
+        <CardMenu
+          label="Dokter"
+          imageSource={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
+          onPress={() => goToSelectWorker('doctor')}
+        />
+        <CardMenu
+          label="Perawat"
+          imageSource={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
+          onPress={() => goToSelectWorker('nurse')}
+          reverse
+        />
+        <CardMenu
+          label="Psikolog"
+          imageSource={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
+          onPress={() => goToSelectWorker('psychologist')}
+        />
+      </View>
     </Container>
   );
 };

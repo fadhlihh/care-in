@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Form, Button, Text } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 import { DatePicker, PickerInput, TextInput } from '../../component';
-import styles from './Styles';
+import styles from './styles';
 
 const Register = () => {
   const [formState, setFormState] = useState({
@@ -13,6 +14,10 @@ const Register = () => {
     { label: 'Laki-Laki', value: 'l' },
     { label: 'Perempuan', value: 'p' }
   ];
+
+  const goToMedicalHistory = () => {
+    Actions.registerMedicalHistory({ registerData: formState.values });
+  };
 
   const handleChange = (name, newValue) => {
     setFormState({
@@ -53,7 +58,7 @@ const Register = () => {
           label="Confirm Password"
           onChangeText={(newValue) => handleChange('confirmPassword', newValue)}
         />
-        <Button full>
+        <Button full onPress={goToMedicalHistory}>
           <Text>Next</Text>
         </Button>
       </Form>

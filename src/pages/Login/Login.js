@@ -9,6 +9,10 @@ const Login = () => {
     Actions.register();
   };
 
+  const goToHome = () => {
+    Actions.home();
+  };
+
   return (
     <View>
       <View style={styles.headerContainer}>
@@ -27,7 +31,7 @@ const Login = () => {
             <Label>Password</Label>
             <Input />
           </Item>
-          <Button full>
+          <Button full onPress={goToHome}>
             <Text>Sign In</Text>
           </Button>
         </Form>

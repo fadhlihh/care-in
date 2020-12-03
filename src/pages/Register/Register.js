@@ -21,13 +21,17 @@ const Register = () => {
   });
 
   useEffect(() => {
-    const errors = validate(formState.values, schema);
+    const validateData = () => {
+      const errors = validate(formState.values, schema);
 
-    setFormState(() => ({
-      ...formState,
-      isValid: !errors,
-      errors: errors || {}
-    }));
+      setFormState(() => ({
+        ...formState,
+        isValid: !errors,
+        errors: errors || {}
+      }));
+    };
+
+    validateData();
   }, [formState.values]);
 
   const genderData = [
@@ -35,28 +39,20 @@ const Register = () => {
     { label: 'Perempuan', value: 'p' }
   ];
 
-  const parseData = () => {
+  const getParsedFormData = () => {
     return {
       ...formState.values,
       tglLahir: DateFormatter.getShortDate(formState.values.tglLahir)
     };
   };
 
-  const backToLogin = () => {
-    Actions.pop();
-  };
-
-  const goToMedicalHistory = () => {
-    Actions.registerMedicalHistory({ registerData: parseData() });
-  };
-
   const hasError = (field) =>
     !!(formState.touched[field] && formState.errors[field]);
 
   const handleSubmit = () => {
-    API.postCheckRegister(parseData())
+    API.postCheckRegister(getParsedFormData())
       .then(() => {
-        goToMedicalHistory();
+        Actions.registerMedicalHistory({ registerData: getParsedFormData() });
       })
       .catch((error) => {
         setFormState({
@@ -89,7 +85,11 @@ const Register = () => {
 
   return (
     <Container>
-      <Header iconName="back" title="Pendaftaran" onPress={backToLogin} />
+      <Header
+        iconName="chevron-back-outline"
+        title="Pendaftaran"
+        onPress={() => Actions.pop()}
+      />
       <Content style={styles.container}>
         <Form style={styles.loginForm}>
           <TextInput
@@ -146,7 +146,8 @@ const Register = () => {
             label="Confirm Password"
             secureTextEntry
             onChangeText={(newValue) =>
-              handleChange('confirmPassword', newValue)}
+              handleChange('confirmPassword', newValue)
+            }
             alertText={
               hasError('confirmPassword')
                 ? formState.errors.confirmPassword[0]

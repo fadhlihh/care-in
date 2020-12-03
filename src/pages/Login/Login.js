@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import { Form, Item, Input, Label, Button, Text, Toast } from 'native-base';
@@ -7,8 +7,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styles from './styles';
 import API from '../../services';
-import AuthAction from '../../redux/actions';
-import { Storage } from '../../helpers';
+import { AuthActions } from '../../redux/actions';
+import { LocalStorage } from '../../helpers';
 
 const propTypes = {
   setToken: PropTypes.func.isRequired
@@ -18,10 +18,6 @@ const defaultProps = {};
 
 const Login = (props) => {
   const { setToken } = props;
-
-  useEffect(() => {
-    Storage.getToken();
-  });
 
   const handleSubmit = () => {
     const mockData = {
@@ -33,7 +29,7 @@ const Login = (props) => {
       .then(
         (res) => {
           setToken(res.token);
-          Storage.storeToken(res.token);
+          LocalStorage.storeToken(res.token);
           Toast.show({ text: res.message }, 1000);
           setTimeout(() => Actions.home(), 1000);
         },
@@ -42,8 +38,7 @@ const Login = (props) => {
         }
       )
       .catch((error) => {
-        console.log(error);
-        Toast.show({ text: 'Something went wrong' }, 3000);
+        Toast.show({ text: `Something went wrong:  ${error.message}` }, 3000);
       });
   };
 
@@ -90,7 +85,7 @@ Login.propTypes = propTypes;
 Login.defaultProps = defaultProps;
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(AuthAction, dispatch);
+  return bindActionCreators(AuthActions, dispatch);
 };
 
 export default connect(null, mapDispatchToProps)(Login);

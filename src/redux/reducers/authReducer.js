@@ -1,4 +1,4 @@
-import authConstants from '../constants/AuthConstants';
+import { AuthConstants } from '../constants';
 
 const initialState = {
   token: null
@@ -6,9 +6,9 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case authConstants.SET_TOKEN:
+    case AuthConstants.SET_TOKEN:
       return {
-        token: `bearer ${action.token}`
+        token: action.token
       };
     default:
       return state;

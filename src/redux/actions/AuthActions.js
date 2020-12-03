@@ -1,4 +1,4 @@
-import AuthConstants from '../constants';
+import { AuthConstants } from '../constants';
 
 const setToken = (token) => ({ type: AuthConstants.SET_TOKEN, token });
 

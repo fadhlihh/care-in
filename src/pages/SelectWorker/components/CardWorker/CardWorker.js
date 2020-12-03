@@ -7,14 +7,14 @@ import styles from './styles';
 const propTypes = {
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  distance: PropTypes.number.isRequired,
+  distance: PropTypes.string.isRequired,
   photoSource: PropTypes.objectOf(PropTypes.string).isRequired,
   onPress: PropTypes.func.isRequired
 };
 
 const defaultProps = {};
 
-const StyledHeader = (props) => {
+const CardWorker = (props) => {
   const { name, price, distance, photoSource, onPress } = props;
 
   return (
@@ -33,7 +33,7 @@ const StyledHeader = (props) => {
   );
 };
 
-StyledHeader.propTypes = propTypes;
-StyledHeader.defaultProps = defaultProps;
+CardWorker.propTypes = propTypes;
+CardWorker.defaultProps = defaultProps;
 
-export default StyledHeader;
+export default CardWorker;

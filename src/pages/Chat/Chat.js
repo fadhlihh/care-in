@@ -1,31 +1,93 @@
 import React from 'react';
-import { Container, Content, Text, Footer, Button } from 'native-base';
+import { View } from 'react-native';
+import { Container, Content, Text, Footer, Input, Button } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Header } from '../../components';
+import { BubbleChat } from './components';
 import styles from './styles';
 
 const propTypes = {};
 
 const defaultProps = {};
 
-const mockData = {
-  name: 'dr. Lucy Purnama',
-  photoSource: 'https://reactnative.dev/img/tiny_logo.png',
-  price: 100000,
-  distance: 4,
-  transportCost: 8000,
-  totalPrice: 108000
-};
+const mockData = [
+  {
+    message: 'Halo',
+    time: '19:48',
+    worker: true
+  },
+  {
+    message: 'Hi',
+    time: '19:50',
+    worker: false
+  },
+  {
+    message: 'Halo',
+    time: '19:48',
+    worker: true
+  },
+  {
+    message: 'Hi',
+    time: '19:50',
+    worker: false
+  },
+  {
+    message: 'Halo',
+    time: '19:48',
+    worker: true
+  },
+  {
+    message: 'Hi',
+    time: '19:50',
+    worker: false
+  },
+  {
+    message: 'Halo',
+    time: '19:48',
+    worker: true
+  },
+  {
+    message: 'Hi',
+    time: '19:50',
+    worker: false
+  },
+  {
+    message: 'Halo',
+    time: '19:48',
+    worker: true
+  },
+  {
+    message: 'Hi',
+    time: '19:50',
+    worker: false
+  }
+];
 
 const Chat = () => {
   return (
     <Container>
-      <Header iconName="back" title="Obrolan" onPress={() => Actions.pop()} />
+      <Header
+        iconName="chevron-back-outline"
+        title="Obrolan"
+        onPress={() => Actions.pop()}
+      />
       <Content>
-        <Text>Chat page</Text>
+        <View>
+          {mockData.map((item, index) => (
+            <BubbleChat
+              key={index}
+              message={item.message}
+              time={item.time}
+              worker={item.item}
+            />
+          ))}
+        </View>
       </Content>
       <Footer>
-        <Text>Footer</Text>
+        <Input />
+        <Button>
+          <Text>Send</Text>
+        </Button>
       </Footer>
     </Container>
   );

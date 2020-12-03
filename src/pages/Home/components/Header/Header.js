@@ -8,7 +8,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  name: 'Mansyah'
+  name: 'User'
 };
 
 const StyledHeader = (props) => {

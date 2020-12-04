@@ -61,30 +61,80 @@ const Home = (props) => {
   return (
     <Container>
       <Content>
-      <Header name={user !== undefined ? user.nama : ''} />
-      
-      <View style={{ flexDirection: 'row',marginHorizontal:10,marginTop:30,marginBottom:'7%', justifyContent: 'space-between'}}>
-        <Text style={{fontWeight:'bold'}}>Transaksi</Text>
-        <Text>Lihat Semua</Text>
+      <View style={{ flexDirection: 'row',marginHorizontal:16,marginTop:30,marginBottom:'7%', justifyContent: 'space-between'}}>
+        <Text style={{fontWeight:'bold',fontSize:24}}>Care.In</Text>
+        <Thumbnail small source={require('../../assets/marcell-white.jpg')} style={{borderRadius:20}}/>
       </View>
-      
-      <Card>
+      <View style={{ flexDirection: 'row',marginHorizontal:36,marginTop:20,marginBottom:'7%', justifyContent: 'space-between'}}>
+        <View>
+        <Text style={{fontSize:12,color:'rgba(6, 44, 60, 0.9)'}}>Total Pemasukan</Text>
+        <Text style={{fontWeight:'bold',fontSize:28,color:'rgba(6, 44, 60, 0.9)'}}>600.000</Text>
+        </View>
+        <View>
+        <Text style={{fontSize:12,color:'rgba(6, 44, 60, 0.9)'}}>Uang yangg harus disetor</Text>
+        <Text style={{fontWeight:'bold',fontSize:28,color:'rgba(6, 44, 60, 0.9)'}}>600.000</Text>
+        </View>
+      </View>
+
+      <View style={{width:396,height:396,backgroundColor:'grey',justifyContent:'center'}}>
+          <Text style={{color:'white',textAlign:'center'}}> Loading.. getting maps api</Text>
+      </View>
+
+      <View style={{marginHorizontal:16}}>
+      <View style={styles.subtitle}>
+        <Text style={{fontWeight:'bold',fontSize:14,color:'rgba(6, 44, 60, 0.9)'}}>Pesanan</Text>
+        <Text style={{fontSize:14,color:'rgba(6, 44, 60, 0.9)'}}>Lihat Riwayat</Text>
+      </View>
+
+    
+      <Card style={styles.card}>
         <CardItem>
           <Left>
-            <Thumbnail source={require('../../assets/marcell-white.jpg')} style={{width:100,height:100,borderRadius:10}}/>
-            <View style={{alignItems:'flex-start',marginLeft:10}}>
-              <Title style={{color:'black'}}>Marcell Antonius</Title>
-              <Subtitle style={{color:'black'}}>Sedang dalam perjalanan</Subtitle>
+            <View>
+              <View style={{marginLeft:'-10%'}}>
+              <Text style={{color:'rgba(6, 44, 60, 0.9)',fontWeight:'bold',fontSize:18}}>Marcell Antonius</Text>
+              <Text style={{color:'rgba(6, 44, 60, 0.9)',fontSize:12}}>Sedang dalam perjalanan</Text>
+              </View>
+              <View style={{flexDirection:'row', marginTop:5,marginLeft:15}}>
+                <Button style={{backgroundColor:'#EB5757',opacity:0.5,width:85,height:32,borderRadius:8}}>
+                  <Text style={{fontSize:10,color:'red'}}>Batalkan</Text>
+                </Button>
+                <Button style={{backgroundColor:'#27AE60',opacity:0.5,width:75,height:32,marginLeft:4,borderRadius:8}}>
+                  <Text style={{fontSize:10,color:'green'}}>Selesai</Text>
+                </Button>
+              </View>
             </View>
           </Left>
           <Right>
-            <View style={{backgroundColor:'#E3292A',borderRadius:15}}>
-              <Text style={{fontSize:15,paddingLeft:20,paddingRight:20,paddingTop:'5%',paddingBottom:'5%', color:'white' }} >Chat</Text>
-            </View>  
+            <Button iconLeft  style={{backgroundColor:'#497CFB',width:79,height:32,marginTop:45,marginRight:10,borderRadius:8}}>
+              <Icon name='paper-plane' style={{fontSize:10}}/>
+              <Text style={{fontSize:10,color:'white',textAlign:'center'}}>Chat</Text>
+            </Button>
           </Right>
         </CardItem>
       </Card>
 
+      <Card style={styles.card}>
+        <CardItem>
+            <View>
+              <View style={{marginLeft:'10%'}}>
+              <Text style={{color:'rgba(6, 44, 60, 0.9)',fontWeight:'bold',fontSize:18}}>Marcell Antonius</Text>
+              <Text style={{color:'rgba(6, 44, 60, 0.9)',fontSize:12}}>Sedang dalam perjalanan</Text>
+              </View>
+              <View style={{flexDirection:'row',position:'absolute',right:0, marginTop:10}}>
+                <Button style={{backgroundColor:'#EB5757',opacity:0.5,width:85,height:32,borderRadius:8}}>
+                  <Text style={{fontSize:10,color:'red'}}>Batalkan</Text>
+                </Button>
+                <Button style={{backgroundColor:'#27AE60',opacity:0.5,width:75,height:32,marginLeft:4,borderRadius:8}}>
+                  <Text style={{fontSize:10,color:'green'}}>Selesai</Text>
+                </Button>
+              </View>
+            </View>
+         
+        </CardItem>
+      </Card>
+      
+      </View>
       <View style={{marginHorizontal:10,marginTop:30}}>
         <Text style={{fontWeight:'bold'}}>Pesan Tenaga Kesehatan</Text>
         <View style={{flexDirection:'row'}}>

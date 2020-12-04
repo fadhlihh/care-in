@@ -6,6 +6,23 @@ module.exports = {
     paddingRight: SPACING.PADDING_HORIZONTAL
   },
   loginForm: {
-    marginVertical: '25%'
+    marginTop: '15%',
+  },
+  button:{
+    marginLeft: 'auto', 
+    borderRadius: 200,
+    color: '#497CFB',
+    elevation:5,
+  },
+  icon:{
+    paddingHorizontal: 5,
+    paddingLeft: '5%',
+    color: 'white'
+  },
+  btnBundle:{
+    flex:1,
+    flexDirection:'column',
+    justifyConten:'flex-end',
+    marginTop:50,
   }
 };

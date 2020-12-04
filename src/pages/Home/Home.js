@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,13 +12,15 @@ import {
   Right,
   CardItem,
   Thumbnail,
-  Content
+  Content,
+  Button
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { Header, CardMenu, Feature } from './components';
+import { Header, Feature } from './components';
 import styles from './styles';
 import Api from '../../services';
 import { UserActions } from '../../redux/actions';
+import { StringBuilder } from '../../helpers';
 
 const propTypes = {
   user: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -27,6 +29,8 @@ const propTypes = {
 
 const Home = (props) => {
   const { user, setUser } = props;
+
+  const [state, setState] = useState({ transactionStatus: 'no-transaction' });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -48,8 +52,116 @@ const Home = (props) => {
       );
     };
 
+    const fetchTransaction = async () => {
+      const params = {
+        params: {
+          limit: 5,
+          page: 1
+        }
+      };
+
+      Api.getTransaction(params).then(
+        (res) => {
+          if (res.transaksiBerjalan !== undefined) {
+            Api.getWorker({
+              params: { id: res.transaksiBerjalan.nakesId }
+            }).then((response) => {
+              setState({
+                ...state,
+                activeTransaction: {
+                  ...res.transaksiBerjalan,
+                  worker: response.nakes[0]
+                },
+                transactionStatus: 'active'
+              });
+            });
+          } else if (res.riwayatTransaksi.length !== 0) {
+            setState({
+              ...state,
+              transactionHistory: res.riwayatTransaksi[0],
+              transactionStatus: 'inactive'
+            });
+          }
+        },
+        (error) => {
+          Toast.show({ text: error.response.data.message });
+        }
+      );
+    };
+
     fetchUser();
+    fetchTransaction();
   }, []);
+
+  const renderTransactionCard = (status) => {
+    switch (status) {
+      case 'active':
+        return (
+          <Card style={styles.card}>
+            <CardItem>
+              <Left>
+                <Thumbnail
+                  source={{
+                    uri: StringBuilder.addBaseURL(
+                      state.activeTransaction.worker.foto
+                    )
+                  }}
+                  style={styles.img}
+                />
+                <View style={styles.subcard}>
+                  <Text style={styles.textSubcard}>
+                    {state.activeTransaction.worker !== undefined
+                      ? state.activeTransaction.worker.nama
+                      : ''}
+                  </Text>
+                  <Text style={styles.subtextSubcard}>
+                    {state.activeTransaction.status}
+                  </Text>
+                </View>
+              </Left>
+              <Right>
+                <Button style={styles.chat} onPress={() => Actions.chat()}>
+                  <Text style={styles.chatText}>Chat</Text>
+                </Button>
+              </Right>
+            </CardItem>
+          </Card>
+        );
+      case 'inactive':
+        return (
+          <Card style={styles.card}>
+            <CardItem>
+              <Left>
+                <Thumbnail
+                  source={require('../../assets/me_here.jpeg')}
+                  style={styles.img}
+                />
+                <View style={styles.subcard}>
+                  <Text style={styles.textSubcard}>Marcell Antonius</Text>
+                  <Text style={styles.doneSubcard}>6 Agustus 2020</Text>
+                  <Text style={styles.doneSubcard}>
+                    Rp. 100.000 •
+                    <Text style={styles.doneInfoSubcard}>Selesai</Text>
+                  </Text>
+                </View>
+              </Left>
+            </CardItem>
+          </Card>
+        );
+      case 'no-transaction':
+        return (
+          <Card style={styles.card}>
+            <CardItem>
+              <Text style={styles.noTransSubcard}>
+                Tidak ada transaksi tersedia
+              </Text>
+            </CardItem>
+          </Card>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <Container>
@@ -57,95 +169,16 @@ const Home = (props) => {
         <Header name={user !== undefined ? user.nama : ''} />
         <View style={styles.root}>
           <View style={styles.subtitle}>
-            <Text style={{ fontWeight: 'bold', fontSize: 14 }}>Transaksi</Text>
-            <Text style={{ fontSize: 14 }}>Lihat Semua</Text>
+            <Text style={styles.textSubHeading}>Transaksi</Text>
+            <TouchableOpacity onPress={() => Actions.transaction()}>
+              <Text style={{ fontSize: 14 }}>Lihat Semua</Text>
+            </TouchableOpacity>
           </View>
 
-          <Card style={styles.card}>
-            <CardItem>
-              <Left>
-                <Thumbnail
-                  source={require('../../assets/me_here.jpeg')}
-                  style={styles.img}
-                />
-                <View style={styles.subcard}>
-                  <Text
-                    style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}
-                  >
-                    Marcell Antonius
-                  </Text>
-                  <Text style={{ color: 'black', fontSize: 12 }}>
-                    Sedang dalam perjalanan
-                  </Text>
-                </View>
-              </Left>
-              <Right>
-                <View style={styles.chat}>
-                  <Text style={styles.chatText}>Chat</Text>
-                </View>
-              </Right>
-            </CardItem>
-          </Card>
-
-          <Card style={styles.card}>
-            <CardItem>
-              <Left>
-                <Thumbnail
-                  source={require('../../assets/me_here.jpeg')}
-                  style={styles.img}
-                />
-                <View style={styles.subcard}>
-                  <Text
-                    style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}
-                  >
-                    Marcell Antonius
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontSize: 14,
-                      paddingRight: '12%'
-                    }}
-                  >
-                    6 Agustus 2020
-                  </Text>
-                  <Text
-                    style={{ color: 'black', fontSize: 14, fontWeight: '600' }}
-                  >
-                    Rp. 100.000 •
-                    <Text
-                      style={{
-                        color: 'green',
-                        fontSize: 14,
-                        fontWeight: '600'
-                      }}
-                    >
-                      Selesai
-                    </Text>
-                  </Text>
-                </View>
-              </Left>
-            </CardItem>
-          </Card>
-
-          <Card style={styles.card}>
-            <CardItem>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  marginVertical: 20,
-                  marginHorizontal: '12%',
-                  color: 'grey',
-                  fontSize: 18
-                }}
-              >
-                Tidak ada transaksi tersedia
-              </Text>
-            </CardItem>
-          </Card>
+          {renderTransactionCard(state.transactionStatus)}
 
           <View style={styles.feature}>
-            <Text style={{ fontWeight: 'bold' }}>Pesan Tenaga Kesehatan</Text>
+            <Text style={styles.textSubHeading}>Pesan Tenaga Kesehatan</Text>
             <View style={{ flexDirection: 'row' }}>
               <Feature
                 title="Dokter"

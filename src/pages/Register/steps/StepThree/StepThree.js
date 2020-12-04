@@ -101,86 +101,41 @@ const Register = () => {
       />
       <Content style={styles.container}>
         <Form style={styles.loginForm}>
-          {/* <TextInput
-            label="Nama Lengkap"
-            onChangeText={(newValue) => handleChange('nama', newValue)}
-            alertText={hasError('nama') ? formState.errors.nama[0] : null}
-            autoFocus
-          />
+         
           <TextInput
-            label="Tempat Lahir"
-            onChangeText={(newValue) => handleChange('tempatLahir', newValue)}
-            alertText={
-              hasError('tempatLahir') ? formState.errors.tempatLahir[0] : null
-            }
-          />
-          <DatePicker
-            label="Tanggal Lahir"
-            onDateChange={(newValue) => handleChange('tglLahir', newValue)}
-          />
-          <PickerInput
-            label="Jenis Kelamin"
-            data={genderData}
-            onValueChange={(newValue) => handleChange('jk', newValue)}
-            selectedValue={formState.values.jk}
-          />
-          <TextInput
-            label="No telepon"
+            label="Berat Badan "
             keyboardType="phone-pad"
-            onChangeText={(newValue) => handleChange('noTelp', newValue)}
-            alertText={hasError('noTelp') ? formState.errors.noTelp[0] : null}
-          />*/}
-          <TextInput
-            label="Username"
-            onChangeText={(newValue) => handleChange('username', newValue)}
+            onChangeText={(newValue) => handleChange('beratBadan', newValue)}
             alertText={
-              hasError('username') ? formState.errors.username[0] : null
+              hasError('beratBadan') ? formState.errors.username[0] : null
             }
           />
           <TextInput
-            label="Email"
-            keyboardType="email-address"
+            label="Tinggi Badan"
+            keyboardType="phone-pad"
             onChangeText={(newValue) => handleChange('email', newValue)}
             alertText={hasError('email') ? formState.errors.email[0] : null}
           />
           <TextInput
-            label="Password"
-            secureTextEntry
-            onChangeText={(newValue) => handleChange('password', newValue)}
-            alertText={
-              hasError('password') ? formState.errors.password[0] : null
-            }
+            label="Golongan Darah"
+            onChangeText={(newValue) => handleChange('golDarah', newValue)}
+            alertText={hasError('golDarah') ? formState.errors.nama[0] : null}
           />
-          <TextInput
-            label="Confirm Password"
-            secureTextEntry
-            onChangeText={(newValue) =>
-              handleChange('confirmPassword', newValue)
-            }
-            alertText={
-              hasError('confirmPassword')
-                ? formState.errors.confirmPassword[0]
-                : null
-            }
-          />
+         
           <View>
             {formState.errorUserExist !== null ? renderErrorUserExist() : null}
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={styles.btnBundle}>
             <Button
               iconRight
-              style={{ marginLeft: 'auto', borderRadius: 10 }}
+              style={styles.button}
               full
               onPress={() => Actions.registerStepFour()}
               // disabled={!formState.isValid}
             >
               <Icon
                 name="arrow-forward"
-                style={{
-                  paddingHorizontal: 5,
-                  paddingLeft: '5%',
-                  color: 'white'
-                }}
+                style={styles.icon}
               />
             </Button>
           </View>

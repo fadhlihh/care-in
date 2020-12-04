@@ -4,6 +4,11 @@ module.exports = {
   root:{
     marginHorizontal:16
   },
+  textSubHeading:{
+    color: 'rgba(6, 44, 60, 0.9)',
+    fontSize: 14,
+    fontWeight:'bold'
+  },
   subtitle:{
     flexDirection: 'row',
     marginTop:40,
@@ -19,17 +24,44 @@ module.exports = {
     borderRadius:24
   },
   subcard:{
-    alignItems:'flex-start',
-    marginLeft:10
+    marginLeft:5
+  },
+  textSubcard:{
+    color: 'rgba(6, 44, 60, 0.9)', 
+    fontWeight: 'bold', 
+    fontSize: 18 
+  },
+  subtextSubcard:{
+    color: 'rgba(6, 44, 60, 0.9)', 
+    fontSize: 12 
+  },
+  doneSubcard:{
+    color: 'rgba(6, 44, 60, 0.9)',
+    fontSize: 14,
+    paddingLeft:'-5%'
+  },
+  doneInfoSubcard:{
+    color: 'green',
+    fontSize: 14,
+    fontWeight: '600'
+  },
+  noTransSubcard:{
+    textAlign: 'center',
+    marginVertical: 20,
+    marginHorizontal: '12%',
+    color: 'grey',
+    fontSize: 18
   },
   chat:{
     backgroundColor:'#497CFB',
-    borderRadius:8
+    borderRadius:8,
+    height:35,
+    width:58,
   },
   chatText:{
-    fontSize:15,
-    paddingLeft:20,
-    paddingRight:20,
+    fontSize:14,
+    paddingLeft:10,
+    paddingRight:10,
     paddingTop:'5%',
     paddingBottom:'5%', 
     color:'white' 

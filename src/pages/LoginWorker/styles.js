@@ -37,7 +37,8 @@ module.exports = {
   },
 
   formContainer: {
-    height: '65%',
+    marginTop:'75%',
+    height: '40%',
     // paddingTop: CONST.LOGO_SIZE / 2 ,
     paddingLeft: SPACING.PADDING_HORIZONTAL,
     paddingRight: SPACING.PADDING_HORIZONTAL
@@ -69,5 +70,7 @@ module.exports = {
   button_save:{
     borderRadius:20,
     marginHorizontal:'7%',
+    marginTop:'5%',
+    backgroundColor:'#497CFB'
   }
 };

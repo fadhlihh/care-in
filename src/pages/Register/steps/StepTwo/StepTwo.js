@@ -104,13 +104,14 @@ const Register = () => {
         title="Pendaftaran"
         onPress={() => Actions.pop()}
       />
-      <Content style={styles.container}>
+      <Content>
+      <View style={styles.container}>
+        <View>
         <Form style={styles.loginForm}>
-          {/* <TextInput
+           <TextInput
             label="Nama Lengkap"
             onChangeText={(newValue) => handleChange('nama', newValue)}
             alertText={hasError('nama') ? formState.errors.nama[0] : null}
-            autoFocus
           />
           <TextInput
             label="Tempat Lahir"
@@ -134,62 +135,30 @@ const Register = () => {
             keyboardType="phone-pad"
             onChangeText={(newValue) => handleChange('noTelp', newValue)}
             alertText={hasError('noTelp') ? formState.errors.noTelp[0] : null}
-          />*/}
-          <TextInput
-            label="Username"
-            onChangeText={(newValue) => handleChange('username', newValue)}
-            alertText={
-              hasError('username') ? formState.errors.username[0] : null
-            }
           />
-          <TextInput
-            label="Email"
-            keyboardType="email-address"
-            onChangeText={(newValue) => handleChange('email', newValue)}
-            alertText={hasError('email') ? formState.errors.email[0] : null}
-          />
-          <TextInput
-            label="Password"
-            secureTextEntry
-            onChangeText={(newValue) => handleChange('password', newValue)}
-            alertText={
-              hasError('password') ? formState.errors.password[0] : null
-            }
-          />
-          <TextInput
-            label="Confirm Password"
-            secureTextEntry
-            onChangeText={(newValue) =>
-              handleChange('confirmPassword', newValue)
-            }
-            alertText={
-              hasError('confirmPassword')
-                ? formState.errors.confirmPassword[0]
-                : null
-            }
-          />
+          
+         
           <View>
             {formState.errorUserExist !== null ? renderErrorUserExist() : null}
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Button
-              iconRight
-              style={{ marginLeft: 'auto', borderRadius: 10 }}
-              full
-              onPress={() => Actions.registerStepThree()}
-              // disabled={!formState.isValid}
-            >
-              <Icon
-                name="arrow-forward"
-                style={{
-                  paddingHorizontal: 5,
-                  paddingLeft: '5%',
-                  color: 'white'
-                }}
-              />
-            </Button>
-          </View>
+          
         </Form>
+        <View style={styles.btnBundle}>
+          <Button
+            iconRight
+            style={styles.button}
+            full
+            onPress={() => Actions.registerStepThree()}
+            // disabled={!formState.isValid}
+          >
+            <Icon
+              name="arrow-forward"
+              style={styles.icon}
+            />
+          </Button>
+        </View>
+        </View>
+      </View>
       </Content>
     </Container>
   );

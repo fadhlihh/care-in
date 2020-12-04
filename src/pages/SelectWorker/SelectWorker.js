@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
-import { Container, Content, Toast } from 'native-base';
+import { Container, Content, Toast, Text } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import Geolocation from '@react-native-community/geolocation';
 import { connect } from 'react-redux';
@@ -19,7 +20,11 @@ const defaultProps = {};
 const SelectWorker = (props) => {
   const { workerType } = props;
 
-  const [state, setState] = useState({ position: {}, worker: [] });
+  const [state, setState] = useState({
+    position: {},
+    worker: [],
+    isLoaded: false
+  });
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -41,19 +46,49 @@ const SelectWorker = (props) => {
             setState({
               ...state,
               position: position.coords,
-              worker: res.nakes
+              worker: res.nakes,
+              isLoaded: true
             });
           },
           (error) => {
             Toast.show({ text: error.response.data.message });
+            setState({
+              ...state,
+              isLoaded: true
+            });
           }
         );
       },
       (error) => {
         Toast.show({ text: error.response.data.message });
+        setState({
+          ...state,
+          isLoaded: true
+        });
       }
     );
   }, []);
+
+  const renderCardWorker = () => {
+    if (state.worker.length !== 0) {
+      return state.worker.map((item) => (
+        <CardWorker
+          key={item.id}
+          name={item.nama}
+          photoSource={{ uri: StringBuilder.addBaseURL(item.foto) }}
+          price={item.harga}
+          distance={item.jarak.teks}
+          onPress={() => {
+            Actions.checkout({
+              userPosition: state.position,
+              worker: item
+            });
+          }}
+        />
+      ));
+    }
+    return <Text>Tenaga kesehatan tidak ada yang tersedia</Text>;
+  };
 
   return (
     <Container>
@@ -63,21 +98,7 @@ const SelectWorker = (props) => {
         onPress={() => Actions.pop()}
       />
       <Content style={styles.cardContainer}>
-        {state.worker.map((item) => (
-          <CardWorker
-            key={item.id}
-            name={item.nama}
-            photoSource={{ uri: StringBuilder.addBaseURL(item.foto) }}
-            price={item.harga}
-            distance={item.jarak.teks}
-            onPress={() => {
-              Actions.checkout({
-                userPosition: state.position,
-                worker: item
-              });
-            }}
-          />
-        ))}
+        {!state.isLoaded ? <ActivityIndicator /> : renderCardWorker()}
       </Content>
     </Container>
   );

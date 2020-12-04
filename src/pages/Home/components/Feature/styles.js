@@ -14,7 +14,7 @@ module.exports = {
     zIndex: 2,
     shadowColor: 'black',
     shadowOpacity: 0.9,
-    elevation: 2
+    elevation: 6
   },
   stack_two: {
     position: 'absolute',
@@ -24,10 +24,16 @@ module.exports = {
     backgroundColor: '#FFB167',
     borderRadius: 10,
     zIndex: 1,
-    elevation: 3
+    elevation: 7
   },
   img: {
     marginHorizontal: 10,
     marginVertical: 5
-  }
+  },
+  title:{
+    paddingTop: '70%',
+    fontSize: 15,
+    color: 'rgba(6, 44, 60, 0.9)',
+    textAlign: 'center'
+  },
 };

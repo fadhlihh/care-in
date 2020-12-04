@@ -106,35 +106,7 @@ const Register = () => {
       />
       <Content style={styles.container}>
         <Form style={styles.loginForm}>
-          {/* <TextInput
-            label="Nama Lengkap"
-            onChangeText={(newValue) => handleChange('nama', newValue)}
-            alertText={hasError('nama') ? formState.errors.nama[0] : null}
-            autoFocus
-          />
-          <TextInput
-            label="Tempat Lahir"
-            onChangeText={(newValue) => handleChange('tempatLahir', newValue)}
-            alertText={
-              hasError('tempatLahir') ? formState.errors.tempatLahir[0] : null
-            }
-          />
-          <DatePicker
-            label="Tanggal Lahir"
-            onDateChange={(newValue) => handleChange('tglLahir', newValue)}
-          />
-          <PickerInput
-            label="Jenis Kelamin"
-            data={genderData}
-            onValueChange={(newValue) => handleChange('jk', newValue)}
-            selectedValue={formState.values.jk}
-          />
-          <TextInput
-            label="No telepon"
-            keyboardType="phone-pad"
-            onChangeText={(newValue) => handleChange('noTelp', newValue)}
-            alertText={hasError('noTelp') ? formState.errors.noTelp[0] : null}
-          />*/}
+         
           <TextInput
             label="Username"
             onChangeText={(newValue) => handleChange('username', newValue)}
@@ -171,25 +143,23 @@ const Register = () => {
           <View>
             {formState.errorUserExist !== null ? renderErrorUserExist() : null}
           </View>
-          <View style={{ flexDirection: 'row' }}>
+        </Form>
+        <View style={styles.btnBundle}>
+          <View>
             <Button
               iconRight
-              style={{ marginLeft: 'auto', borderRadius: 10 }}
+              style={styles.button}
               full
               onPress={() => Actions.registerStepTwo()}
               // disabled={!formState.isValid}
             >
               <Icon
                 name="arrow-forward"
-                style={{
-                  paddingHorizontal: 5,
-                  paddingLeft: '5%',
-                  color: 'white'
-                }}
+                style={styles.icon}
               />
             </Button>
+            </View>
           </View>
-        </Form>
       </Content>
     </Container>
   );

@@ -26,8 +26,10 @@ const CardTransaction = (props) => {
         return 'Sedang menunggu konfirmasi';
       case 'berjalan':
         return 'Tenaga kesehatan akan datang';
+      case 'selesai':
+        return 'Selesai';
       default:
-        return date;
+        return 'Status tidak valid';
     }
   };
 
@@ -39,9 +41,10 @@ const CardTransaction = (props) => {
         </View>
         <View style={styles.information}>
           <Text style={styles.name}>{name}</Text>
+          {status === 'selesai' && <Text style={styles.subinfo}>{date}</Text>}
           <Text style={styles.subinfo}>{getSubInfo()}</Text>
         </View>
-        {status !== 'off' && (
+        {status !== 'selesai' && (
           <Button onPress={onPress}>
             <Text>Chat</Text>
           </Button>

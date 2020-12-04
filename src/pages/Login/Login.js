@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import { View, Image } from 'react-native';
 import PropTypes from 'prop-types';
-import { Form, Button, Thumbnail, Text, Toast, Icon } from 'native-base';
+import {
+  Form,
+  Button,
+  Thumbnail,
+  Text,
+  Toast,
+  Icon,
+  Content
+} from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { TextInput } from '../../components';
+import { Header } from './components';
 import styles from './styles';
 import API from '../../services';
 import { AuthActions } from '../../redux/actions';
@@ -57,10 +66,12 @@ const Login = (props) => {
 
   return (
     <View>
+      <Header />
       <Button onPress={() => Actions.loginWorker()}>
         <Icon name="medkit-outline" />
       </Button>
-      <View style={styles.logoContainer}>
+
+      {/* <View style={styles.logoContainer}>
         <Thumbnail
           square
           large
@@ -68,7 +79,7 @@ const Login = (props) => {
           source={require('../../assets/masker.png')}
         />
         <Text style={styles.textheader}>Care In</Text>
-      </View>
+      </View> */}
       {/* <View style={styles.headerContainer}>
         <Image
           style={styles.logo}

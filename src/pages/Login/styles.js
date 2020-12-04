@@ -37,7 +37,8 @@ module.exports = {
   },
 
   formContainer: {
-    height: '65%',
+    marginTop:'80%',
+    height: '55%',
     // paddingTop: CONST.LOGO_SIZE / 2 ,
     paddingLeft: SPACING.PADDING_HORIZONTAL,
     paddingRight: SPACING.PADDING_HORIZONTAL

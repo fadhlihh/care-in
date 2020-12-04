@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import { View, Image } from 'react-native';
 import PropTypes from 'prop-types';
-import { Form, Button, Thumbnail, Text, Toast } from 'native-base';
+import {
+  Form,
+  Button,
+  Thumbnail,
+  Text,
+  Toast,
+  Icon,
+  Content
+} from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { TextInput } from '../../components';
+import { Header } from './components';
 import styles from './styles';
 import API from '../../services';
 import { AuthActions } from '../../redux/actions';
@@ -38,7 +47,10 @@ const Login = (props) => {
         }
       )
       .catch((error) => {
-        Toast.show({ text: `Something went wrong:  ${error.response.data.message}` }, 3000);
+        Toast.show(
+          { text: `Something went wrong:  ${error.response.data.message}` },
+          3000
+        );
       });
   };
 
@@ -54,10 +66,26 @@ const Login = (props) => {
 
   return (
     <View>
-      <View style={styles.logoContainer}>
-        <Thumbnail square large style={styles.logoheader} source={require('../../assets/marcell-white.jpg')} />
+      <Header />
+      <Button transparent onPress={() => Actions.loginWorker()}>
+        <Icon
+          name="chevron-back-outline"
+          style={{ color: 'white', fontSize: 30, position: 'absolute' }}
+        />
+      </Button>
+      {/* <Button transparent  onPress={() => Actions.loginWorker()}>
+            <Icon name='medkit-outline' style={{color:'white',fontSize:36}}/>
+          </Button> */}
+
+      {/* <View style={styles.logoContainer}>
+        <Thumbnail
+          square
+          large
+          style={styles.logoheader}
+          source={require('../../assets/masker.png')}
+        />
         <Text style={styles.textheader}>Care In</Text>
-      </View>
+      </View> */}
       {/* <View style={styles.headerContainer}>
         <Image
           style={styles.logo}
@@ -75,13 +103,25 @@ const Login = (props) => {
             label="Password"
             onChangeText={(newValue) => handleChange('password', newValue)}
           />
-          <Button full primary  onPress={() => Actions.homeWorker()} style={styles.button_save}>
-            <Text>Save</Text>
+
+          <Button
+            full
+            onPress={() => Actions.homeWorker()}
+            style={styles.button_save}
+          >
+            <Text>Masuk</Text>
           </Button>
         </Form>
-        <Button transparent light style={styles.separator} onPress={() => Actions.register()}>
-          <Text style={styles.textseparator}>Belum memiliki akun ? Daftar disini</Text>
-        </Button>
+        {/* <Button
+          transparent
+          light
+          style={styles.separator}
+          onPress={() => Actions.register()}
+        >
+          <Text style={styles.textseparator}>
+            Belum memiliki akun ? Daftar disini
+          </Text>
+        </Button> */}
       </View>
     </View>
   );

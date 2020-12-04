@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Image, View ,TouchableOpacity} from 'react-native';
-import { Container, Text, ActionSheet, Button , Icon,Card, Toast } from 'native-base';
+import { View, TouchableOpacity } from 'react-native';
+import { Container, Text, Card, Toast } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import Geolocation from '@react-native-community/geolocation';
 import { connect } from 'react-redux';
 import Api from '../../services';
 import { CardMedicalHistory } from './components';
 import { Header } from '../../components';
 import { DateFormatter } from '../../helpers';
 import styles from './styles';
-import mockData from './mockData';
-
 
 const propTypes = {
   user: PropTypes.objectOf(PropTypes.any).isRequired
@@ -53,7 +50,7 @@ const MedicalHistory = (props) => {
         title="Riwayat Kesehatan"
         onPress={() => Actions.pop()}
       />
-        <Card>
+      <Card>
         {state.medicalHistory.map((item, index) => (
           <CardMedicalHistory
             key={index}
@@ -61,18 +58,18 @@ const MedicalHistory = (props) => {
             date={DateFormatter.getLegibleDate(item.tanggal)}
           />
         ))}
-        </Card>
-        <View style={styles.container}>
-          <View style={styles.fab}>
-              <TouchableOpacity >
-              <View style={styles.containt}>
-                  <View style={{paddingLeft:'30%'}}>
-                      <Text style={styles.textContaint}>+</Text>
-                  </View>
+      </Card>
+      <View style={styles.container}>
+        <View style={styles.fab}>
+          <TouchableOpacity>
+            <View style={styles.containt}>
+              <View style={{ paddingLeft: '30%' }}>
+                <Text style={styles.textContaint}>+</Text>
               </View>
-              </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
         </View>
+      </View>
     </Container>
   );
 };

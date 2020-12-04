@@ -17,6 +17,7 @@ import { Header, DatePicker, PickerInput, TextInput } from '../../../../componen
 import styles from './Styles';
 import { DateFormatter } from '../../../../helpers';
 import schema from './schema';
+import TambahPenyakit from './components';
 
 const Register = () => {
   const [formState, setFormState] = useState({
@@ -100,91 +101,60 @@ const Register = () => {
         onPress={() => Actions.pop()}
       />
       <Content style={styles.container}>
+        <View>
+        
+        </View>
         <Form style={styles.loginForm}>
-          {/* <TextInput
-            label="Nama Lengkap"
-            onChangeText={(newValue) => handleChange('nama', newValue)}
-            alertText={hasError('nama') ? formState.errors.nama[0] : null}
-            autoFocus
-          />
-          <TextInput
-            label="Tempat Lahir"
-            onChangeText={(newValue) => handleChange('tempatLahir', newValue)}
-            alertText={
-              hasError('tempatLahir') ? formState.errors.tempatLahir[0] : null
-            }
-          />
-          <DatePicker
-            label="Tanggal Lahir"
-            onDateChange={(newValue) => handleChange('tglLahir', newValue)}
-          />
-          <PickerInput
-            label="Jenis Kelamin"
-            data={genderData}
-            onValueChange={(newValue) => handleChange('jk', newValue)}
-            selectedValue={formState.values.jk}
-          />
-          <TextInput
-            label="No telepon"
-            keyboardType="phone-pad"
-            onChangeText={(newValue) => handleChange('noTelp', newValue)}
-            alertText={hasError('noTelp') ? formState.errors.noTelp[0] : null}
-          />*/}
-          <TextInput
-            label="Username"
-            onChangeText={(newValue) => handleChange('username', newValue)}
-            alertText={
-              hasError('username') ? formState.errors.username[0] : null
-            }
-          />
-          <TextInput
-            label="Email"
-            keyboardType="email-address"
-            onChangeText={(newValue) => handleChange('email', newValue)}
-            alertText={hasError('email') ? formState.errors.email[0] : null}
-          />
-          <TextInput
-            label="Password"
-            secureTextEntry
-            onChangeText={(newValue) => handleChange('password', newValue)}
-            alertText={
-              hasError('password') ? formState.errors.password[0] : null
-            }
-          />
-          <TextInput
-            label="Confirm Password"
-            secureTextEntry
-            onChangeText={(newValue) =>
-              handleChange('confirmPassword', newValue)
-            }
-            alertText={
-              hasError('confirmPassword')
-                ? formState.errors.confirmPassword[0]
-                : null
-            }
-          />
+
+        <Text style={styles.textHeading}>{`Tambahkan \nRiwayat Penyakit`}</Text>
+
+          <View style={styles.input}>
+            <View style={styles.tahunInput}>
+              <TextInput 
+                label="Tahun"
+                keyboardType="phone-pad"
+                onChangeText={(newValue) => handleChange('tahun', newValue)}
+                alertText={hasError('tahun') ? formState.errors.noTelp[0] : null}
+              />
+              </View> 
+              <View style={styles.penyakitInput}>
+                <TextInput
+                  label="Penyakit"
+                  onChangeText={(newValue) => handleChange('penyakit', newValue)}
+                  alertText={
+                    hasError('penyakit') ? formState.errors.username[0] : null
+                  }
+                />
+            </View> 
+          </View>
+          
+          <View style={styles.option}>
+            <Button rounded style={styles.btnTrash}>
+              <Icon name='trash-outline' style={styles.iconTrash}  />
+            </Button>
+            <Button rounded style={styles.btnAdd}>
+              <Icon name='add-outline' style={styles.iconAdd}  />
+            </Button>
+          </View>
+
           <View>
             {formState.errorUserExist !== null ? renderErrorUserExist() : null}
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Button
-              iconRight
-              style={{ marginLeft: 'auto', borderRadius: 10 }}
-              full
-              onPress={handleSubmit}
-              disabled={!formState.isValid}
-            >
-              <Icon
-                name="arrow-forward"
-                style={{
-                  paddingHorizontal: 5,
-                  paddingLeft: '5%',
-                  color: 'white'
-                }}
-              />
-            </Button>
-          </View>
         </Form>
+        <View style={styles.btnBundle}>
+          <Button
+            iconRight
+            style={styles.button}
+            full
+            onPress={() => Actions.registerStepFour()}
+            // disabled={!formState.isValid}
+          >
+            <Icon
+              name="arrow-forward"
+              style={styles.icon}
+            />
+          </Button>
+        </View>
       </Content>
     </Container>
   );

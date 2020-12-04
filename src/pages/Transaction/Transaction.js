@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
-import { Container, Content, Toast } from 'native-base';
+import { Container, Content, Toast, Text } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Header } from '../../components';
 import { CardTransaction } from './components';
 import Api from '../../services';
-import mockData from './mockData';
 import { StringBuilder } from '../../helpers';
+import mockData from './mockData';
 
 const propTypes = {};
 
 const defaultProps = {};
 
-const History = () => {
+const Transaction = () => {
   const [state, setState] = useState({
-    history: [],
+    transactionHistory: [],
     activeTransaction: {},
-    isLoaded: false
+    isLoaded: false,
+    transactionStatus: 'no-transaction'
   });
 
   useEffect(() => {
@@ -28,34 +29,80 @@ const History = () => {
         }
       };
 
-      Api.getTransaction(params)
-        .then(
-          (res) => {
-            return res.transaksiBerjalan;
-          },
-          (error) => {
-            Toast.show({ text: error.response.data.message });
-          }
-        )
-        .then((activeTransaction) => {
-          Api.getWorker({ params: { id: activeTransaction.nakesId } }).then(
-            (res) => {
+      Api.getTransaction(params).then(
+        (res) => {
+          if (res.transaksiBerjalan !== undefined) {
+            Api.getWorker({
+              params: { id: res.transaksiBerjalan.nakesId }
+            }).then((response) => {
               setState({
                 ...state,
                 activeTransaction: {
-                  ...activeTransaction,
-                  worker: res.nakes[0]
+                  ...res.transaksiBerjalan,
+                  worker: response.nakes[0]
                 },
+                transactionStatus: 'active',
                 isLoaded: true
               });
-            }
-          );
-        });
+            });
+          } else if (res.riwayatTransaksi.length !== 0) {
+            setState({
+              ...state,
+              transactionHistory: res.riwayatTransaksi,
+              transactionStatus: 'inactive',
+              isLoaded: true
+            });
+          }
+        },
+        (error) => {
+          Toast.show({ text: error.response.data.message });
+        }
+      );
     };
 
     fetchTransaction();
   }, []);
 
+  const renderTransactionCard = () => {
+    const cardList = [];
+
+    if (state.transactionStatus === 'active') {
+      cardList.push(
+        <CardTransaction
+          name={state.activeTransaction.worker.nama}
+          photoSource={{
+            uri: StringBuilder.addBaseURL(state.activeTransaction.worker.foto)
+          }}
+          status={state.activeTransaction.status}
+          date={state.activeTransaction.waktuDibuat}
+          onPress={() => Actions.chat()}
+        />
+      );
+    }
+
+    state.transactionHistory.forEach((item) =>
+      cardList.push(
+        <CardTransaction
+          name="History"
+          photoSource={{
+            // uri: StringBuilder.addBaseURL(state.activeTransaction.worker.foto)
+            uri: 'https://reactnative.dev/img/tiny_logo.png'
+          }}
+          status="selesai"
+          date={item.waktuDibuat}
+        />
+      )
+    );
+
+    return cardList;
+  };
+
+  const renderContent = () => {
+    if (state.transactionStatus === 'no-transaction') {
+      return <Text>Kamu belum pernah memesan tenaga kesehatan</Text>;
+    }
+    return renderTransactionCard();
+  };
   return (
     <Container>
       <Header
@@ -64,35 +111,13 @@ const History = () => {
         onPress={() => Actions.pop()}
       />
       <Content>
-        {!state.isLoaded ? (
-          <ActivityIndicator />
-        ) : (
-          <CardTransaction
-            name={state.activeTransaction.worker.nama}
-            photoSource={{
-              uri: StringBuilder.addBaseURL(state.activeTransaction.worker.foto)
-            }}
-            status={state.activeTransaction.status}
-            date={state.activeTransaction.waktuDibuat}
-            onPress={() => Actions.chat()}
-          />
-        )}
-        {/* {mockData.map((element, index) => (
-          <CardTransaction
-            key={index}
-            name={element.name}
-            photoSource={{ uri: element.photoSource }}
-            status={element.status}
-            date={element.date}
-            onPress={() => Actions.chat()}
-          />
-        ))} */}
+        {!state.isLoaded ? <ActivityIndicator /> : renderContent()}
       </Content>
     </Container>
   );
 };
 
-History.propTypes = propTypes;
-History.defaultProps = defaultProps;
+Transaction.propTypes = propTypes;
+Transaction.defaultProps = defaultProps;
 
-export default History;
+export default Transaction;

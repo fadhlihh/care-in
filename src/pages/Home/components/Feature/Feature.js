@@ -22,12 +22,8 @@ const Feature = (props) => {
     <TouchableOpacity style={styles.root} onPress={onPress}>
       <View style={styles.stack_one}>
         <Title
-          style={{
-            paddingTop: '70%',
-            fontSize: 15,
-            color: 'black',
-            textAlign: 'center'
-          }}
+          style={styles.title
+          }
         >
           {title}
         </Title>

@@ -82,24 +82,21 @@ const Routes = () => {
               }}
             />
             <Scene
-              key="history"
+              key="transaction"
               component={Transaction}
               title="Transaksi"
-              iconName="swap-horizontal"
               hideNavBar
             />
             <Scene
               key="medicalHistory"
               component={MedicalHistory}
               title="Rekam Medis"
-              iconName="pulse"
               hideNavBar
             />
             <Scene
               key="profile"
               component={Profile}
               title="Profil"
-              iconName="person"
               hideNavBar
             />
             <Scene

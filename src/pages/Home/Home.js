@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { BackHandler, Alert, View } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,6 +19,23 @@ const Home = (props) => {
   const { user, setUser } = props;
 
   useEffect(() => {
+    const backAction = () => {
+      Alert.alert('Tunggu dulu!', 'Kamu yakin akan keluar?', [
+        {
+          text: 'Kembali',
+          onPress: () => null,
+          style: 'cancel'
+        },
+        { text: 'Iya', onPress: () => BackHandler.exitApp() }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
     const fetchUser = async () => {
       Api.getCheckAuth().then(
         (res) => {
@@ -39,6 +56,8 @@ const Home = (props) => {
     };
 
     fetchUser();
+
+    return () => backHandler.remove();
   }, []);
 
   return (

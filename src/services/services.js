@@ -1,5 +1,5 @@
-import get from './get';
-import post from './post';
+import get from './Get';
+import post from './Post';
 import config from './config';
 
 // Get

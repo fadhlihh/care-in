@@ -45,12 +45,12 @@ const SelectWorker = (props) => {
             });
           },
           (error) => {
-            Toast.show({ text: error.message });
+            Toast.show({ text: error.response.data.message });
           }
         );
       },
       (error) => {
-        Toast.show({ text: error.message });
+        Toast.show({ text: error.response.data.message });
       }
     );
   }, []);

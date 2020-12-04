@@ -4,18 +4,18 @@ import { Router, Scene, Tabs } from 'react-native-router-flux';
 import {
   Home,
   Login,
-  Register,
-  RegisterMedicalHistory,
   SelectWorker,
   Checkout,
   Chat,
   Transaction,
   Profile,
   MedicalHistory,
-  EditProfile
+  EditProfile,
+  LoginWorker,
+  HomeWorker
 } from './pages';
-import { BottomNavigation } from './components';
-import { LocalStorage } from './helpers';
+import { StepOne, StepTwo, StepThree, StepFour } from './pages/Register/steps';
+import { LocalStorage, BackAction } from './helpers';
 
 const Routes = () => {
   const [state, setState] = useState({ token: null, isLoaded: false });
@@ -41,42 +41,67 @@ const Routes = () => {
               component={Login}
               title="Login"
               initial={state.token === null}
+              onBack={() => BackAction.exit()}
             />
-            <Tabs
+            <Scene key="register" hideNavBar>
+              <Scene
+                key="registerStepOne"
+                component={StepOne}
+                title="Daftar"
+                hideNavBar
+              />
+              <Scene
+                key="registerStepTwo"
+                component={StepTwo}
+                title="Daftar"
+                hideNavBar
+              />
+              <Scene
+                key="registerStepThree"
+                component={StepThree}
+                title="Daftar"
+                hideNavBar
+              />
+              <Scene
+                key="registerStepFour"
+                component={StepFour}
+                title="Daftar"
+                hideNavBar
+              />
+            </Scene>
+            <Scene
               key="home"
-              tabBarComponent={BottomNavigation}
+              component={Home}
+              title="Home"
+              iconName="home"
               hideNavBar
               initial={state.token !== null}
-            >
-              <Scene
-                key="order"
-                component={Home}
-                title="Home"
-                iconName="home"
-                hideNavBar
-              />
-              <Scene
-                key="history"
-                component={Transaction}
-                title="Transaksi"
-                iconName="swap-horizontal"
-                hideNavBar
-              />
-              <Scene
-                key="medicalHistory"
-                component={MedicalHistory}
-                title="Rekam Medis"
-                iconName="pulse"
-                hideNavBar
-              />
-              <Scene
-                key="profile"
-                component={Profile}
-                title="Profil"
-                iconName="person"
-                hideNavBar
-              />
-            </Tabs>
+              onBack={() => {
+                BackAction.exit();
+                console.log('back pressed');
+              }}
+            />
+            <Scene
+              key="history"
+              component={Transaction}
+              title="Transaksi"
+              iconName="swap-horizontal"
+              hideNavBar
+            />
+            <Scene
+              key="medicalHistory"
+              component={MedicalHistory}
+              title="Rekam Medis"
+              iconName="pulse"
+              hideNavBar
+            />
+            <Scene
+              key="profile"
+              component={Profile}
+              title="Profil"
+              iconName="person"
+              hideNavBar
+            />
             <Scene
               key="selectWorker"
               component={SelectWorker}
@@ -89,23 +114,23 @@ const Routes = () => {
               title="Pembayaran"
               hideNavBar
             />
-            <Scene
-              key="register"
-              component={Register}
-              title="Register"
-              hideNavBar
-            />
-            <Scene
-              key="registerMedicalHistory"
-              component={RegisterMedicalHistory}
-              title="Riwayat Kesehatan"
-              hideNavBar
-            />
             <Scene key="chat" component={Chat} title="Obrolan" hideNavBar />
             <Scene
               key="editProfile"
               component={EditProfile}
               title="Edit Profil"
+              hideNavBar
+            />
+            <Scene
+              key="loginWorker"
+              component={LoginWorker}
+              title="Login Nakes"
+              hideNavBar
+            />
+            <Scene
+              key="homeWorker"
+              component={HomeWorker}
+              title="Home Nakes"
               hideNavBar
             />
           </Scene>

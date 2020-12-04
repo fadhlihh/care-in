@@ -172,7 +172,7 @@ const EditProfile = (props) => {
           <View>
             {formState.errorUserExist !== null ? renderErrorUserExist() : null}
           </View>
-          <Button full onPress={handleSubmit} disabled={!formState.isValid}>
+          <Button full primary  onPress={handleSubmit} disabled={!formState.isValid} style={styles.button_save}>
             <Text>Save</Text>
           </Button>
         </Form>

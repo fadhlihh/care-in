@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Content, Toast } from 'native-base';
+import { Image, View ,TouchableOpacity} from 'react-native';
+import { Container, Text, ActionSheet, Button , Icon,Card, Toast } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import Geolocation from '@react-native-community/geolocation';
 import { connect } from 'react-redux';
@@ -10,6 +11,7 @@ import { Header } from '../../components';
 import { DateFormatter } from '../../helpers';
 import styles from './styles';
 import mockData from './mockData';
+
 
 const propTypes = {
   user: PropTypes.objectOf(PropTypes.any).isRequired
@@ -36,7 +38,7 @@ const MedicalHistory = (props) => {
           setState({ medicalHistory: res.riwayatKesehatan });
         },
         (error) => {
-          Toast.show({ text: error.message });
+          Toast.show({ text: error.response.data.message });
         }
       );
     };
@@ -51,7 +53,7 @@ const MedicalHistory = (props) => {
         title="Riwayat Kesehatan"
         onPress={() => Actions.pop()}
       />
-      <Content style={styles.cardContainer}>
+        <Card>
         {state.medicalHistory.map((item, index) => (
           <CardMedicalHistory
             key={index}
@@ -59,7 +61,18 @@ const MedicalHistory = (props) => {
             date={DateFormatter.getLegibleDate(item.tanggal)}
           />
         ))}
-      </Content>
+        </Card>
+        <View style={styles.container}>
+          <View style={styles.fab}>
+              <TouchableOpacity >
+              <View style={styles.containt}>
+                  <View style={{paddingLeft:'30%'}}>
+                      <Text style={styles.textContaint}>+</Text>
+                  </View>
+              </View>
+              </TouchableOpacity>
+          </View>
+        </View>
     </Container>
   );
 };

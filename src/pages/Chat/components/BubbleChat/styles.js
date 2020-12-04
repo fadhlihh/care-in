@@ -1,10 +1,23 @@
 module.exports = {
   root: {
     marginTop: 8,
-    marginBottom: 8
+    marginBottom: 8,
+    marginLeft:'45%',
+    marginRight:'2%',
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 24,
   },
 
-  content: {},
+  content: {
+    backgroundColor:'#497CFB',
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 8,
+    
+  },
 
   imageContainer: {
     flex: 1
@@ -18,18 +31,71 @@ module.exports = {
 
   information: {
     flex: 3,
-    paddingLeft: 16
+  },
+
+  chatBundle:{
+    flexDirection:'row',
+    alignSelf:'flex-end'
   },
 
   name: {
-    color: 'red'
+    color: 'white',
+    fontSize:14,
   },
 
-  subinfo: {
-    color: 'blue'
+  time:{
+    color:'white',
+    fontSize:12,
+    textAlign:'right'
   },
 
-  distance: {
-    color: 'yellow'
-  }
+
+  //sender
+  largeBundle_sender:{
+    flexDirection:'row',
+    marginVertical:'2%'
+  },
+
+  img_sender:{
+    marginTop:'2%',
+    marginLeft:'4%'
+  },
+
+  root_sender: {
+    marginTop: 8,
+    marginBottom: 8,
+    marginLeft:'2%',
+    marginRight:'45%',
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 24
+  },
+
+  content_sender:{
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 24
+
+  },
+
+  information_sender: {
+  },
+
+  chatBundle_sender:{
+  },
+
+  name_sender: {
+    color: 'black',
+    fontSize:14,
+  },
+
+  time_sender:{
+    color:'grey',
+    fontSize:12,
+    textAlign:'right'
+  },
+
+  
 };

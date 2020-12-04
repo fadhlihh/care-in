@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image, View } from 'react-native';
-import { Card, CardItem, Text } from 'native-base';
+import { CardItem, Title, Subtitle,Left, Thumbnail, Body, Text } from 'native-base';
 import styles from './styles';
 
 const propTypes = {
@@ -15,14 +15,14 @@ const CardMedicalHistory = (props) => {
   const { name, date } = props;
 
   return (
-    <Card style={styles.root}>
-      <CardItem button style={styles.content}>
-        <View style={styles.information}>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.date}>{date}</Text>
+    <CardItem>
+      <Body style={styles.root}>
+        <View style={styles.bubble}>
+        <Title style={{color:'black',fontSize:16,fontWeight:'700'}}>{name}</Title>
+        <Subtitle style={{color:'black',fontSize:12}}>{date}</Subtitle>
         </View>
-      </CardItem>
-    </Card>
+      </Body>
+    </CardItem>
   );
 };
 

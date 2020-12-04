@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { Toast, Container, Form, Button, Text, Content } from 'native-base';
+import { Toast, Container, Form, Icon, Button, Text, Content, Right } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import validate from 'validate.js';
 import API from '../../services';
 import { Header, DatePicker, PickerInput, TextInput } from '../../components';
-import styles from './styles';
+import styles from './Styles';
 import { DateFormatter } from '../../helpers';
 import schema from './schema';
 
@@ -92,7 +92,7 @@ const Register = () => {
       />
       <Content style={styles.container}>
         <Form style={styles.loginForm}>
-          <TextInput
+          {/* <TextInput
             label="Nama Lengkap"
             onChangeText={(newValue) => handleChange('nama', newValue)}
             alertText={hasError('nama') ? formState.errors.nama[0] : null}
@@ -120,13 +120,7 @@ const Register = () => {
             keyboardType="phone-pad"
             onChangeText={(newValue) => handleChange('noTelp', newValue)}
             alertText={hasError('noTelp') ? formState.errors.noTelp[0] : null}
-          />
-          <TextInput
-            label="Email"
-            keyboardType="email-address"
-            onChangeText={(newValue) => handleChange('email', newValue)}
-            alertText={hasError('email') ? formState.errors.email[0] : null}
-          />
+          />*/}
           <TextInput
             label="Username"
             onChangeText={(newValue) => handleChange('username', newValue)}
@@ -134,6 +128,12 @@ const Register = () => {
               hasError('username') ? formState.errors.username[0] : null
             }
           />
+          <TextInput
+            label="Email"
+            keyboardType="email-address"
+            onChangeText={(newValue) => handleChange('email', newValue)}
+            alertText={hasError('email') ? formState.errors.email[0] : null}
+          /> 
           <TextInput
             label="Password"
             secureTextEntry
@@ -157,9 +157,11 @@ const Register = () => {
           <View>
             {formState.errorUserExist !== null ? renderErrorUserExist() : null}
           </View>
-          <Button full onPress={handleSubmit} disabled={!formState.isValid}>
-            <Text>Next</Text>
-          </Button>
+          <View style={{flexDirection: 'row'}}>
+            <Button iconRight style={{marginLeft:'auto',borderRadius:10}} full onPress={handleSubmit} disabled={!formState.isValid} >
+              <Icon name='arrow-forward' style={{paddingHorizontal:5,paddingLeft:'5%',color:'white'}}/>
+            </Button>
+          </View>
         </Form>
       </Content>
     </Container>

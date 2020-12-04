@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { Image, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
-import { Container, Content, Button } from 'native-base';
+import { Container, List, ListItem,Card,CardItem, Left, Right, Thumbnail, Body, Content, Button, Subtitle, Title } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import styles from './styles';
+import { Header,Profile_item, Riwayat} from './components';
 
 const propTypes = {
   user: PropTypes.objectOf(PropTypes.any).isRequired
@@ -22,8 +23,9 @@ const Profile = (props) => {
   return (
     <Container>
       <Content>
+      <Header name={user.nama} username={user.username} />
         <View style={styles.containter}>
-          <View>
+          {/* <View>
             <Image
               style={styles.photoProfile}
               source={{
@@ -34,24 +36,18 @@ const Profile = (props) => {
             />
             <Text style={styles.name}>{user.nama}</Text>
             <Text style={styles.name}>{user.username}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <View style={styles.info}>
-              <Text>Email</Text>
-              <Text>{user.email}</Text>
-            </View>
-            <View style={styles.info}>
-              <Text>Telpon</Text>
-              <Text>{user.noTelp}</Text>
-            </View>
-            <View style={styles.info}>
-              <Text>Tempat lahir</Text>
-              <Text>{user.tempatLahir}</Text>
-            </View>
-            <View style={styles.info}>
-              <Text>Tanggal Lahir</Text>
-              <Text>{user.tglLahir}</Text>
-            </View>
+          </View> */}
+          <List style={{marginTop:10}}>
+            <Profile_item title='Email' item={user.email} icon={'mail-outline'} warna={'blue'} />
+            <Profile_item title='Telpon' item={user.noTelp} icon={'call-outline'} color={'red'} />
+            {/* <Profile_item title='Tempat lahir' item={user.tempatLahir} imageSource={require('../../assets/perawat.png')} />
+            <Profile_item title='Tanggal Lahir' item={user.tglLahir} imageSource={require('../../assets/perawat.png')} /> 
+            <Profile_item title='Golongan Darah' item={`${user.goldar}`} imageSource={require('../../assets/perawat.png')} />*/}
+            <Profile_item title='Berat Badan' item={`${user.beratBadan} kg`} icon={'man-outline'} color={'yellow'} />
+            <Profile_item title='Tinggi Badan' item={`${user.beratBadan} cm`} icon={'resize-outline'} color={'green'} />
+          </List>
+          {/* <View style={styles.infoContainer}>
+            
             <View style={styles.info}>
               <Text>Jenis Kelamin</Text>
               <Text>{`${user.beratBadan} kg`}</Text>
@@ -61,19 +57,36 @@ const Profile = (props) => {
               <Text>{`${user.beratBadan} cm`}</Text>
             </View>
             <View style={styles.info}>
-              <Text>Golongan Darah</Text>
-              <Text>{`${user.goldar}`}</Text>
+              <Text></Text>
+              <Text></Text>
             </View>
-          </View>
+          </View> 
           <Button
             onPress={() => {
               Actions.editProfile({ id: user.id });
             }}
           >
             <Text>Edit</Text>
-          </Button>
+          </Button> */}
+        <View style={{ flexDirection: 'row',marginHorizontal:15,marginTop:30,marginBottom:'3%', justifyContent: 'space-between'}}>
+          <Text style={{fontWeight:'bold',fontSize:14}}>Riwayat Kesehatan</Text>
+          <Text style={{fontSize:14}}>Lihat Semua</Text>
+        </View>
+        <Card>
+          <Riwayat penyakit='Sakit Jantung' tanggal='Agustus 2020'/>
+          <Riwayat penyakit='Sakit Jantung' tanggal='Agustus 2020'/>
+          <Riwayat penyakit='Sakit Jantung' tanggal='Agustus 2020'/>
+        </Card>
+  
         </View>
         <View />
+        <Button
+            onPress={() => {
+              Actions.editProfile({ id: user.id });
+            }}
+          >
+            <Text>Edit</Text>
+          </Button>
       </Content>
     </Container>
   );

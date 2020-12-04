@@ -34,7 +34,7 @@ const History = () => {
             return res.transaksiBerjalan;
           },
           (error) => {
-            Toast.show({ text: error.message });
+            Toast.show({ text: error.response.data.message });
           }
         )
         .then((activeTransaction) => {

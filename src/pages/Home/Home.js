@@ -131,20 +131,18 @@ const Home = (props) => {
         return (
           <Card style={styles.card}>
             <CardItem>
-              <Left>
-                <Thumbnail
-                  source={require('../../assets/me_here.jpeg')}
-                  style={styles.img}
-                />
-                <View style={styles.subcard}>
-                  <Text style={styles.textSubcard}>Marcell Antonius</Text>
-                  <Text style={styles.doneSubcard}>6 Agustus 2020</Text>
-                  <Text style={styles.doneSubcard}>
-                    Rp. 100.000 •
-                    <Text style={styles.doneInfoSubcard}>Selesai</Text>
-                  </Text>
-                </View>
-              </Left>
+              <Thumbnail
+                source={require('../../assets/me_here.jpeg')}
+                style={styles.img}
+              />
+              <View style={styles.subcard}>
+                <Text style={styles.textSubcard}>Marcell Antonius</Text>
+                <Text style={styles.doneSubcard}>6 Agustus 2020</Text>
+                <Text style={styles.doneSubcard}>
+                  Rp. 100.000 •
+                  <Text style={styles.doneInfoSubcard}> Selesai</Text>
+                </Text>
+              </View>
             </CardItem>
           </Card>
         );

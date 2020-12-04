@@ -17,6 +17,7 @@ import { TextInput } from '../../components';
 import { Header } from './components';
 import styles from './styles';
 import API from '../../services';
+import { UserType } from '../../constant';
 import { AuthActions } from '../../redux/actions';
 import { LocalStorage } from '../../helpers';
 
@@ -34,13 +35,14 @@ const Login = (props) => {
   });
 
   const handleSubmit = () => {
-    API.postGenerateToken(formState.values)
+    API.postGenerateTokenWorker(formState.values)
       .then(
         (res) => {
           setToken(res.token);
           LocalStorage.storeToken(res.token);
+          LocalStorage.storeUserType(UserType.WORKER);
           Toast.show({ text: res.message }, 1000);
-          setTimeout(() => Actions.home(), 1000);
+          setTimeout(() => Actions.homeWorker(), 1000);
         },
         (error) => {
           Toast.show({ text: error.response.data.message }, 3000);
@@ -67,31 +69,12 @@ const Login = (props) => {
   return (
     <View>
       <Header />
-      <Button transparent onPress={() => Actions.loginWorker()}>
+      <Button transparent onPress={() => Actions.pop()}>
         <Icon
           name="chevron-back-outline"
           style={{ color: 'white', fontSize: 30, position: 'absolute' }}
         />
       </Button>
-      {/* <Button transparent  onPress={() => Actions.loginWorker()}>
-            <Icon name='medkit-outline' style={{color:'white',fontSize:36}}/>
-          </Button> */}
-
-      {/* <View style={styles.logoContainer}>
-        <Thumbnail
-          square
-          large
-          style={styles.logoheader}
-          source={require('../../assets/masker.png')}
-        />
-        <Text style={styles.textheader}>Care In</Text>
-      </View> */}
-      {/* <View style={styles.headerContainer}>
-        <Image
-          style={styles.logo}
-          source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
-        />
-      </View> */}
       <View style={styles.formContainer}>
         <Form style={styles.loginForm}>
           <TextInput
@@ -106,22 +89,12 @@ const Login = (props) => {
 
           <Button
             full
-            onPress={() => Actions.homeWorker()}
+            onPress={() => handleSubmit()}
             style={styles.button_save}
           >
             <Text>Masuk</Text>
           </Button>
         </Form>
-        {/* <Button
-          transparent
-          light
-          style={styles.separator}
-          onPress={() => Actions.register()}
-        >
-          <Text style={styles.textseparator}>
-            Belum memiliki akun ? Daftar disini
-          </Text>
-        </Button> */}
       </View>
     </View>
   );

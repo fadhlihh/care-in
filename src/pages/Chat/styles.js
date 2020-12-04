@@ -6,7 +6,10 @@ module.exports = {
 
     buttonIcon:{
         color:'blue',
-        paddingRight:'5%',
         alignSelf:'flex-end'
+    },
+    button:{
+        marginHorizontal:'4%',
+        marginVertical:'1%'
     }
 };

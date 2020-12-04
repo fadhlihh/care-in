@@ -24,7 +24,7 @@ module.exports = {
     borderRadius:24
   },
   subcard:{
-    marginLeft:5
+    marginLeft:13
   },
   textSubcard:{
     color: 'rgba(6, 44, 60, 0.9)', 

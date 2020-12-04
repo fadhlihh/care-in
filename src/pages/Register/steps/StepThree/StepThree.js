@@ -7,22 +7,30 @@ import {
   Icon,
   Button,
   Text,
-  Content,
-  Right
+  Content
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import validate from 'validate.js';
-import API from '../../../../services';
-import { Header, DatePicker, PickerInput, TextInput } from '../../../../components';
+import PropTypes from 'prop-types';
+import { BloodType } from '../../../../constant';
+import { Header, TextInput, PickerInput } from '../../../../components';
 import styles from './Styles';
 import { DateFormatter } from '../../../../helpers';
 import schema from './schema';
 
-const Register = () => {
+const propTypes = {
+  stepTwoValues: PropTypes.objectOf(PropTypes.any).isRequired
+};
+
+const defaultProps = {};
+
+const Register = (props) => {
+  const { stepTwoValues } = props;
+
   const [formState, setFormState] = useState({
     isValid: false,
     values: {
-      jk: 'l'
+      goldar: 'ab'
     },
     errors: {},
     touched: {},
@@ -43,37 +51,8 @@ const Register = () => {
     validateData();
   }, [formState.values]);
 
-  const genderData = [
-    { label: 'Laki-Laki', value: 'l' },
-    { label: 'Perempuan', value: 'p' }
-  ];
-
-  const getParsedFormData = () => {
-    return {
-      ...formState.values,
-      tglLahir: DateFormatter.getShortDate(formState.values.tglLahir)
-    };
-  };
-
   const hasError = (field) =>
     !!(formState.touched[field] && formState.errors[field]);
-
-  const handleSubmit = () => {
-    API.postCheckRegister(getParsedFormData())
-      .then(() => {
-        Actions.registerMedicalHistory({ registerData: getParsedFormData() });
-      })
-      .catch((error) => {
-        setFormState({
-          ...formState,
-          errorUserExist: error.response.data.constraints
-        });
-        Toast.show({
-          text: error.response.data.message,
-          duration: 3000
-        });
-      });
-  };
 
   const handleChange = (name, newValue) => {
     setFormState({
@@ -101,27 +80,30 @@ const Register = () => {
       />
       <Content style={styles.container}>
         <Form style={styles.loginForm}>
-         
           <TextInput
-            label="Berat Badan "
-            keyboardType="phone-pad"
+            label="Berat Badan"
+            keyboardType="numeric"
             onChangeText={(newValue) => handleChange('beratBadan', newValue)}
             alertText={
-              hasError('beratBadan') ? formState.errors.username[0] : null
+              hasError('beratBadan') ? formState.errors.beratBadan[0] : null
             }
           />
           <TextInput
             label="Tinggi Badan"
-            keyboardType="phone-pad"
-            onChangeText={(newValue) => handleChange('email', newValue)}
-            alertText={hasError('email') ? formState.errors.email[0] : null}
+            keyboardType="numeric"
+            onChangeText={(newValue) => handleChange('tinggiBadan', newValue)}
+            alertText={
+              hasError('email') ? formState.errors.tinggiBadan[0] : null
+            }
           />
-          <TextInput
+
+          <PickerInput
             label="Golongan Darah"
-            onChangeText={(newValue) => handleChange('golDarah', newValue)}
-            alertText={hasError('golDarah') ? formState.errors.nama[0] : null}
+            data={BloodType}
+            onValueChange={(newValue) => handleChange('goldar', newValue)}
+            selectedValue={formState.values.goldar}
           />
-         
+
           <View>
             {formState.errorUserExist !== null ? renderErrorUserExist() : null}
           </View>
@@ -130,13 +112,14 @@ const Register = () => {
               iconRight
               style={styles.button}
               full
-              onPress={() => Actions.registerStepFour()}
+              onPress={() =>
+                Actions.registerStepFour({
+                  stepThreeValues: { ...stepTwoValues, ...formState.values }
+                })
+              }
               // disabled={!formState.isValid}
             >
-              <Icon
-                name="arrow-forward"
-                style={styles.icon}
-              />
+              <Icon name="arrow-forward" style={styles.icon} />
             </Button>
           </View>
         </Form>
@@ -144,5 +127,8 @@ const Register = () => {
     </Container>
   );
 };
+
+Register.propTypes = propTypes;
+Register.defaultProps = defaultProps;
 
 export default Register;

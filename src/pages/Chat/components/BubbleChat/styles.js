@@ -2,12 +2,10 @@ module.exports = {
   root: {
     marginTop: 8,
     marginBottom: 8,
-    marginLeft:'45%',
-    marginRight:'2%',
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 8,
   },
 
   content: {
@@ -16,7 +14,6 @@ module.exports = {
     borderBottomRightRadius: 24,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 8,
-    
   },
 
   imageContainer: {
@@ -30,30 +27,53 @@ module.exports = {
   },
 
   information: {
-    flex: 3,
-  },
+    flex:1,
+    flexDirection:'column',justifyContent:'flex-end'
+   },
 
   chatBundle:{
-    flexDirection:'row',
-    alignSelf:'flex-end'
   },
 
-  name: {
+  
+  //receiver
+  largeBundle_receiver:{
+    flexDirection:'row',
+    marginVertical:'2%',
+    marginLeft:'40%',
+    justifyContent:'flex-end'
+  },
+  content_receiver:{
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 8,
+    backgroundColor:'#497CFB',
+  },
+  root_receiver: {
+    marginTop: 8,
+    marginBottom: 8,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 8,
+    marginRight:'4%',
+  },
+  name_receiver: {
     color: 'white',
     fontSize:14,
+    textAlign:'right'
   },
 
-  time:{
+  time_receiver:{
     color:'white',
     fontSize:12,
     textAlign:'right'
   },
 
-
   //sender
   largeBundle_sender:{
     flexDirection:'row',
-    marginVertical:'2%'
+    marginVertical:'2%',
   },
 
   img_sender:{
@@ -65,7 +85,7 @@ module.exports = {
     marginTop: 8,
     marginBottom: 8,
     marginLeft:'2%',
-    marginRight:'45%',
+    marginRight:'40%',
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
     borderTopLeftRadius: 8,

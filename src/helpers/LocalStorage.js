@@ -18,9 +18,29 @@ const getToken = async () => {
   }
 };
 
+const storeUserType = async (type) => {
+  try {
+    await AsyncStorage.setItem('userType', type);
+    console.log('User type set!', type);
+  } catch (error) {
+    console.log('User type is not set', error);
+  }
+};
+
+const getUserType = async () => {
+  try {
+    return await AsyncStorage.getItem('userType');
+  } catch (error) {
+    console.log('Failed to get user type : ', error);
+    return null;
+  }
+};
+
 const LocalStorage = {
   storeToken,
-  getToken
+  getToken,
+  storeUserType,
+  getUserType
 };
 
 export default LocalStorage;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, Button } from 'native-base';
+import { Text, View, Button, Icon } from 'native-base';
 import TextInput from '../TextInput';
 import styles from './styles';
 
@@ -15,7 +15,7 @@ const propTypes = {
 const defaultProps = {
   firstLabel: 'Label One',
   secondLabel: 'Label Two',
-  minRows: 2,
+  minRows: 1,
   maxRows: 5,
   onValueChange: () => {}
 };
@@ -57,28 +57,43 @@ const PairInputText = (props) => {
       {inputList.map((list, index) => {
         return (
           <View key={index}>
-            <TextInput
-              label={firstLabel}
-              onChangeText={(newValue) =>
-                handleInputChange(index, 'valueOne', newValue)}
-              value={list.valueOne}
-              keyboardType="numeric"
-            />
-            <TextInput
-              label={secondLabel}
-              onChangeText={(newValue) =>
-                handleInputChange(index, 'valueTwo', newValue)}
-              value={list.valueTwo}
-            />
+            <View style={styles.input}>
+              <View style={styles.tahunInput}>
+                <TextInput
+                  label={firstLabel}
+                  onChangeText={(newValue) =>
+                    handleInputChange(index, 'valueOne', newValue)}
+                  value={list.valueOne}
+                  keyboardType="numeric"
+                />
+              </View>
+              <View style={styles.penyakitInput}>
+                <TextInput
+                  label={secondLabel}
+                  onChangeText={(newValue) =>
+                    handleInputChange(index, 'valueTwo', newValue)}
+                  value={list.valueTwo}
+                />
+              </View>
+            </View>
+
             <View style={styles.buttonContainer}>
-              {inputList.length > minRows && (
-                <Button onPress={() => handleRemoveClick(index)}>
-                  <Text>Remove</Text>
+              {inputList.length > minRows && inputList.length === index + 1 && (
+                <Button
+                  rounded
+                  style={styles.buttonDelete}
+                  onPress={() => handleRemoveClick(index)}
+                >
+                  <Icon name="trash-outline" style={styles.iconDelete} />
                 </Button>
               )}
               {inputList.length < maxRows && index === inputList.length - 1 && (
-                <Button onPress={handleAddClick}>
-                  <Text>Add</Text>
+                <Button
+                  rounded
+                  style={styles.buttonAdd}
+                  onPress={handleAddClick}
+                >
+                  <Icon name="add-outline" style={styles.iconAdd} />
                 </Button>
               )}
             </View>

@@ -23,8 +23,8 @@ const Profile = (props) => {
     const fetchMedicalHistory = async () => {
       const params = {
         params: {
-          limit: 0,
-          page: 0
+          limit: 2,
+          page: 1
         }
       };
 
@@ -73,7 +73,7 @@ const Profile = (props) => {
             />
             <ProfileItem
               title="Tinggi Badan"
-              item={`${user.beratBadan} cm`}
+              item={`${user.tinggiBadan} cm`}
               icon="resize-outline"
               color="green"
             />

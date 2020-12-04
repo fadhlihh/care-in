@@ -11,19 +11,32 @@ import {
   Right
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import PropTypes from 'prop-types';
 import validate from 'validate.js';
 import API from '../../../../services';
-import { Header, DatePicker, PickerInput, TextInput } from '../../../../components';
-import styles from './Styles';
+import {
+  Header,
+  DatePicker,
+  PairInputText,
+  TextInput
+} from '../../../../components';
+import styles from './styles';
 import { DateFormatter } from '../../../../helpers';
 import schema from './schema';
-import TambahPenyakit from './components';
 
-const Register = () => {
+const propTypes = {
+  stepThreeValues: PropTypes.objectOf(PropTypes.any).isRequired
+};
+
+const defaultProps = {};
+
+const Register = (props) => {
+  const { stepThreeValues } = props;
+
   const [formState, setFormState] = useState({
-    isValid: false,
+    isValid: true,
     values: {
-      jk: 'l'
+      riwayatKesehatan: []
     },
     errors: {},
     touched: {},
@@ -31,67 +44,54 @@ const Register = () => {
   });
 
   useEffect(() => {
-    const validateData = () => {
-      const errors = validate(formState.values, schema);
-
-      setFormState(() => ({
-        ...formState,
-        isValid: !errors,
-        errors: errors || {}
-      }));
-    };
-
-    validateData();
+    console.log(formState.values);
   }, [formState.values]);
 
-  const genderData = [
-    { label: 'Laki-Laki', value: 'l' },
-    { label: 'Perempuan', value: 'p' }
-  ];
-
-  const getParsedFormData = () => {
+  const getParsedFormData = (data) => {
     return {
-      ...formState.values,
-      tglLahir: DateFormatter.getShortDate(formState.values.tglLahir)
+      ...data,
+      tglLahir: DateFormatter.getShortDate(data.tglLahir)
     };
   };
 
-  const hasError = (field) =>
-    !!(formState.touched[field] && formState.errors[field]);
+  const parseYearToDate = (year) =>
+    DateFormatter.getShortDate(new Date(parseInt(year, 10), 0, 1));
 
-  const handleSubmit = () => {
-    API.postCheckRegister(getParsedFormData())
-      .then(() => {
-        Actions.registerMedicalHistory({ registerData: getParsedFormData() });
-      })
-      .catch((error) => {
-        setFormState({
-          ...formState,
-          errorUserExist: error.response.data.constraints
-        });
-        Toast.show({
-          text: error.response.data.message,
-          duration: 3000
-        });
-      });
-  };
+  const parsePairInputData = (data) =>
+    data.map((item) => {
+      return {
+        tanggal: parseYearToDate(item.valueOne),
+        namaPenyakit: item.valueTwo
+      };
+    });
 
-  const handleChange = (name, newValue) => {
+  const saveValuesPairInput = (newData) => {
     setFormState({
       ...formState,
       values: {
         ...formState.values,
-        [name]: newValue
-      },
-      touched: {
-        ...formState.touched,
-        [name]: true
+        riwayatKesehatan: parsePairInputData(newData)
       }
     });
   };
 
-  const renderErrorUserExist = () =>
-    formState.errorUserExist.map((error) => <Text>{error.errors[0]}</Text>);
+  const handleSubmit = () => {
+    const body = { ...stepThreeValues, ...formState.values };
+
+    console.log(getParsedFormData(body));
+    API.postRegister(body).then(
+      (res) => {
+        Toast.show({ text: res.message, duration: 3000 });
+        setTimeout(Actions.login(), 3000);
+      },
+      (error) => {
+        Toast.show({
+          text: error.response.data.message,
+          duration: 3000
+        });
+      }
+    );
+  };
 
   return (
     <Container>
@@ -101,63 +101,34 @@ const Register = () => {
         onPress={() => Actions.pop()}
       />
       <Content style={styles.container}>
-        <View>
-        
-        </View>
+        <View />
         <Form style={styles.loginForm}>
+          <Text style={styles.textHeading}>
+            {`Tambahkan \nRiwayat Penyakit`}
+          </Text>
 
-        <Text style={styles.textHeading}>{`Tambahkan \nRiwayat Penyakit`}</Text>
-
-          <View style={styles.input}>
-            <View style={styles.tahunInput}>
-              <TextInput 
-                label="Tahun"
-                keyboardType="phone-pad"
-                onChangeText={(newValue) => handleChange('tahun', newValue)}
-                alertText={hasError('tahun') ? formState.errors.noTelp[0] : null}
-              />
-              </View> 
-              <View style={styles.penyakitInput}>
-                <TextInput
-                  label="Penyakit"
-                  onChangeText={(newValue) => handleChange('penyakit', newValue)}
-                  alertText={
-                    hasError('penyakit') ? formState.errors.username[0] : null
-                  }
-                />
-            </View> 
-          </View>
-          
-          <View style={styles.option}>
-            <Button rounded style={styles.btnTrash}>
-              <Icon name='trash-outline' style={styles.iconTrash}  />
-            </Button>
-            <Button rounded style={styles.btnAdd}>
-              <Icon name='add-outline' style={styles.iconAdd}  />
-            </Button>
-          </View>
-
-          <View>
-            {formState.errorUserExist !== null ? renderErrorUserExist() : null}
-          </View>
+          <PairInputText
+            firstLabel="Tahun"
+            secondLabel="Nama Penyakit"
+            onValueChange={saveValuesPairInput}
+          />
         </Form>
         <View style={styles.btnBundle}>
           <Button
             iconRight
             style={styles.button}
             full
-            onPress={() => Actions.registerStepFour()}
-            // disabled={!formState.isValid}
+            onPress={() => handleSubmit()}
           >
-            <Icon
-              name="arrow-forward"
-              style={styles.icon}
-            />
+            <Icon name="arrow-forward" style={styles.icon} />
           </Button>
         </View>
       </Content>
     </Container>
   );
 };
+
+Register.propTypes = propTypes;
+Register.defaultProps = defaultProps;
 
 export default Register;

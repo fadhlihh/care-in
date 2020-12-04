@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { View } from 'react-native';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Toast, Container, Form, Button, Text, Content } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import validate from 'validate.js';
-import API from '../../services';
+import Api from '../../services';
+import { UserActions } from '../../redux/actions';
 import { Header, DatePicker, PickerInput, TextInput } from '../../components';
 import styles from './styles';
 import { DateFormatter } from '../../helpers';
 import schema from './schema';
 
 const propTypes = {
-  user: PropTypes.objectOf(PropTypes.any).isRequired
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  setUser: PropTypes.func.isRequired
 };
 
 const defaultProps = {};
 
 const EditProfile = (props) => {
-  const { user } = props;
+  const { user, setUser } = props;
 
   const bloodType = [
     { label: 'AB', value: 'ab' },
@@ -55,6 +58,7 @@ const EditProfile = (props) => {
       validateData();
     }
 
+    console.log(formState.errors);
     return () => {
       isMounted = false;
     };
@@ -75,11 +79,6 @@ const EditProfile = (props) => {
   const hasError = (field) =>
     !!(formState.touched[field] && formState.errors[field]);
 
-  const handleSubmit = () => {
-    console.log(formState.values);
-    // fetch API and update redux store
-  };
-
   const handleChange = (name, newValue) => {
     setFormState({
       ...formState,
@@ -92,6 +91,27 @@ const EditProfile = (props) => {
         [name]: true
       }
     });
+  };
+
+  const handleSubmit = () => {
+    console.log('data', getParsedFormData());
+    Api.putUser(user.id, getParsedFormData()).then(
+      (res) => {
+        Api.getUser(user.id).then(
+          (data) => {
+            setUser(data.pasien);
+            Toast.show({ text: res.message });
+            setTimeout(() => Actions.pop(), 2000);
+          },
+          (e) => {
+            Toast.show({ text: e.response.data.message });
+          }
+        );
+      },
+      (error) => {
+        Toast.show({ text: error.response.data.message });
+      }
+    );
   };
 
   const renderErrorUserExist = () =>
@@ -123,7 +143,9 @@ const EditProfile = (props) => {
           <DatePicker
             label="Tanggal Lahir"
             onDateChange={(newValue) => handleChange('tglLahir', newValue)}
-            placeHolderText={DateFormatter.getLegibleDate(formState.values.tglLahir)}
+            placeHolderText={DateFormatter.getLegibleDate(
+              formState.values.tglLahir
+            )}
           />
           <PickerInput
             label="Jenis Kelamin"
@@ -172,7 +194,13 @@ const EditProfile = (props) => {
           <View>
             {formState.errorUserExist !== null ? renderErrorUserExist() : null}
           </View>
-          <Button full primary  onPress={handleSubmit} disabled={!formState.isValid} style={styles.button_save}>
+          <Button
+            full
+            primary
+            onPress={handleSubmit}
+            disabled={!formState.isValid}
+            style={styles.button_save}
+          >
             <Text>Save</Text>
           </Button>
         </Form>
@@ -190,4 +218,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(EditProfile);
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(UserActions, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);

@@ -1,18 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import {
-  Toast,
-  Container,
-  Form,
-  Icon,
-  Button,
-  Text,
-  Content,
-  Right
-} from 'native-base';
+import { Container, Form, Icon, Button, Content } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import validate from 'validate.js';
-import API from '../../../../services';
+import PropTypes from 'prop-types';
 import {
   Header,
   DatePicker,
@@ -20,10 +11,17 @@ import {
   TextInput
 } from '../../../../components';
 import styles from './Styles';
-import { DateFormatter } from '../../../../helpers';
 import schema from './schema';
 
-const Register = () => {
+const propTypes = {
+  stepOneValues: PropTypes.objectOf(PropTypes.any).isRequired
+};
+
+const defaultProps = {};
+
+const Register = (props) => {
+  const { stepOneValues } = props;
+
   const [formState, setFormState] = useState({
     isValid: false,
     values: {
@@ -53,32 +51,8 @@ const Register = () => {
     { label: 'Perempuan', value: 'p' }
   ];
 
-  const getParsedFormData = () => {
-    return {
-      ...formState.values,
-      tglLahir: DateFormatter.getShortDate(formState.values.tglLahir)
-    };
-  };
-
   const hasError = (field) =>
     !!(formState.touched[field] && formState.errors[field]);
-
-  const handleSubmit = () => {
-    API.postCheckRegister(getParsedFormData())
-      .then(() => {
-        Actions.registerMedicalHistory({ registerData: getParsedFormData() });
-      })
-      .catch((error) => {
-        setFormState({
-          ...formState,
-          errorUserExist: error.response.data.constraints
-        });
-        Toast.show({
-          text: error.response.data.message,
-          duration: 3000
-        });
-      });
-  };
 
   const handleChange = (name, newValue) => {
     setFormState({
@@ -94,9 +68,6 @@ const Register = () => {
     });
   };
 
-  const renderErrorUserExist = () =>
-    formState.errorUserExist.map((error) => <Text>{error.errors[0]}</Text>);
-
   return (
     <Container>
       <Header
@@ -105,63 +76,59 @@ const Register = () => {
         onPress={() => Actions.pop()}
       />
       <Content>
-      <View style={styles.container}>
-        <View>
-        <Form style={styles.loginForm}>
-           <TextInput
-            label="Nama Lengkap"
-            onChangeText={(newValue) => handleChange('nama', newValue)}
-            alertText={hasError('nama') ? formState.errors.nama[0] : null}
-          />
-          <TextInput
-            label="Tempat Lahir"
-            onChangeText={(newValue) => handleChange('tempatLahir', newValue)}
-            alertText={
-              hasError('tempatLahir') ? formState.errors.tempatLahir[0] : null
-            }
-          />
-          <DatePicker
-            label="Tanggal Lahir"
-            onDateChange={(newValue) => handleChange('tglLahir', newValue)}
-          />
-          <PickerInput
-            label="Jenis Kelamin"
-            data={genderData}
-            onValueChange={(newValue) => handleChange('jk', newValue)}
-            selectedValue={formState.values.jk}
-          />
-          <TextInput
-            label="No telepon"
-            keyboardType="phone-pad"
-            onChangeText={(newValue) => handleChange('noTelp', newValue)}
-            alertText={hasError('noTelp') ? formState.errors.noTelp[0] : null}
-          />
-          
-         
+        <View style={styles.container}>
           <View>
-            {formState.errorUserExist !== null ? renderErrorUserExist() : null}
+            <Form style={styles.loginForm}>
+              <TextInput
+                label="Nama Lengkap"
+                onChangeText={(newValue) => handleChange('nama', newValue)}
+                alertText={hasError('nama') ? formState.errors.nama[0] : null}
+              />
+              <TextInput
+                label="Tempat Lahir"
+                onChangeText={(newValue) =>
+                  handleChange('tempatLahir', newValue)
+                }
+                alertText={
+                  hasError('tempatLahir')
+                    ? formState.errors.tempatLahir[0]
+                    : null
+                }
+              />
+              <DatePicker
+                label="Tanggal Lahir"
+                onDateChange={(newValue) => handleChange('tglLahir', newValue)}
+              />
+              <PickerInput
+                label="Jenis Kelamin"
+                data={genderData}
+                onValueChange={(newValue) => handleChange('jk', newValue)}
+                selectedValue={formState.values.jk}
+              />
+            </Form>
+            <View style={styles.btnBundle}>
+              <Button
+                iconRight
+                style={styles.button}
+                full
+                onPress={() =>
+                  Actions.registerStepThree({
+                    stepTwoValues: { ...stepOneValues, ...formState.values }
+                  })
+                }
+                disabled={!formState.isValid}
+              >
+                <Icon name="arrow-forward" style={styles.icon} />
+              </Button>
+            </View>
           </View>
-          
-        </Form>
-        <View style={styles.btnBundle}>
-          <Button
-            iconRight
-            style={styles.button}
-            full
-            onPress={() => Actions.registerStepThree()}
-            // disabled={!formState.isValid}
-          >
-            <Icon
-              name="arrow-forward"
-              style={styles.icon}
-            />
-          </Button>
         </View>
-        </View>
-      </View>
       </Content>
     </Container>
   );
 };
+
+Register.propTypes = propTypes;
+Register.defaultProps = defaultProps;
 
 export default Register;

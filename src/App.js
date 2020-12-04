@@ -14,7 +14,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <View style={{ flex: 1 }}>
-        <StatusBar barStyle="light-content" backgroundColor="#2a83be" />
+        <StatusBar barStyle="light-content" backgroundColor="#497CFB" />
         <Root>
           <Routes />
         </Root>

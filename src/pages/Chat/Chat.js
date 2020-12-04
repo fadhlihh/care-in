@@ -89,7 +89,7 @@ const Chat = () => {
             <Icon name='paper-plane' style={styles.buttonIcon} />
           </Button>
       </Footer> */} 
-      <Footer style={{backgroundColor:'#fafafa',borderRadius:20,marginHorizontal:10}}>
+      <Footer transparent style={{backgroundColor:'white',opacity:0.9,borderRadius:20,marginHorizontal:10}}>
         <Input placeholder="Masukkan Pesan" style={styles.input}/>
         <Button iconLeft transparent style={styles.button}>
             <Icon name='paper-plane' style={styles.buttonIcon} />

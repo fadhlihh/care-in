@@ -20,16 +20,18 @@ const BubbleChat = (props) => {
   return (
     <View> 
       {/* //first it for receiver  */}
-    <Card style={styles.root}>
-      <CardItem button style={styles.content}>
-        <View style={styles.information}>
-          <View style={styles.chatBundle}>
-            <Text style={styles.name}>{message}</Text>
+      <View style={styles.largeBundle_receiver}>
+      <Card style={styles.root_receiver}>
+        <CardItem button style={styles.content_receiver}>
+          <View style={styles.information_sender}>
+            <View style={styles.chatBundle_sender}>
+              <Text style={styles.name_receiver}>{message}</Text>
+            </View>
+            <Subtitle style={styles.time_receiver}>{time}</Subtitle>
           </View>
-          <Subtitle style={styles.time}>{time}</Subtitle>
-        </View>
-      </CardItem>
-    </Card>
+        </CardItem>
+      </Card>
+      </View>
 
 
     {/* //second its for sender */}

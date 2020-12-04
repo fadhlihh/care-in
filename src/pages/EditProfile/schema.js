@@ -19,7 +19,7 @@ module.exports = {
   noTelp: {
     presence: { allowEmpty: false },
     format: {
-      pattern: Regex.numberOnly
+      pattern: Regex.phoneNumber
     },
     length: {
       maximum: 15

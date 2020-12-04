@@ -1,57 +1,26 @@
 import { Regex } from '../../../../helpers';
 
 module.exports = {
-  nama: {
+  beratBadan: {
     presence: { allowEmpty: false },
     format: {
-      pattern: Regex.alphabetWithSpace
+      pattern: Regex.decimal
     }
   },
-  tempatLahir: {
+  tinggiBadan: {
     presence: { allowEmpty: false },
     format: {
-      pattern: Regex.alphabetWithSpace
-    }
+      pattern: Regex.decimal
+    },
+    numericality: { notGreaterThan: 1000 }
   },
-  tglLahir: {
-    presence: { allowEmpty: false }
-  },
-  noTelp: {
+  goldar: {
     presence: { allowEmpty: false },
     format: {
-      pattern: Regex.numberOnly
+      pattern: Regex.alphabetLowerCaseOnly
     },
     length: {
-      maximum: 15
+      maximum: 2
     }
-  },
-  email: {
-    presence: { allowEmpty: false },
-    email: {
-      message: 'tidak sesuai kriteria'
-    }
-  },
-  username: {
-    presence: { allowEmpty: false },
-    format: {
-      pattern: Regex.username
-    },
-    length: {
-      minimum: 3,
-      maximum: 16
-    }
-  },
-  password: {
-    presence: { allowEmpty: false },
-    length: {
-      minimum: 8,
-      tooShort: 'minimal 8 karakter',
-      maximum: 128,
-      tooLong: 'maximal 128 karakter'
-    }
-  },
-  confirmPassword: {
-    equality: { attribute: 'password' },
-    presence: { allowEmpty: false }
   }
 };

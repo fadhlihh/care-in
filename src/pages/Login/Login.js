@@ -17,6 +17,7 @@ import { TextInput } from '../../components';
 import { Header } from './components';
 import styles from './styles';
 import API from '../../services';
+import { UserType } from '../../constant';
 import { AuthActions } from '../../redux/actions';
 import { LocalStorage } from '../../helpers';
 
@@ -39,6 +40,7 @@ const Login = (props) => {
         (res) => {
           setToken(res.token);
           LocalStorage.storeToken(res.token);
+          LocalStorage.storeUserType(UserType.PATIENT);
           Toast.show({ text: res.message }, 1000);
           setTimeout(() => Actions.home(), 1000);
         },

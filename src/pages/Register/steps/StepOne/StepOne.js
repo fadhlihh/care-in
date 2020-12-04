@@ -1,34 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import {
-  Toast,
-  Container,
-  Form,
-  Icon,
-  Button,
-  Text,
-  Content,
-  Right
-} from 'native-base';
+import { Toast, Container, Form, Icon, Button, Content } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import validate from 'validate.js';
-import API from '../../../../services';
-import {
-  Header,
-  DatePicker,
-  PickerInput,
-  TextInput
-} from '../../../../components';
+import Api from '../../../../services';
+import { Header, TextInput } from '../../../../components';
 import styles from './Styles';
-import { DateFormatter } from '../../../../helpers';
 import schema from './schema';
+import dummyData from './dummyData';
 
 const Register = () => {
   const [formState, setFormState] = useState({
     isValid: false,
-    values: {
-      jk: 'l'
-    },
+    values: {},
     errors: {},
     touched: {},
     errorUserExist: null
@@ -48,37 +32,8 @@ const Register = () => {
     validateData();
   }, [formState.values]);
 
-  const genderData = [
-    { label: 'Laki-Laki', value: 'l' },
-    { label: 'Perempuan', value: 'p' }
-  ];
-
-  const getParsedFormData = () => {
-    return {
-      ...formState.values,
-      tglLahir: DateFormatter.getShortDate(formState.values.tglLahir)
-    };
-  };
-
   const hasError = (field) =>
     !!(formState.touched[field] && formState.errors[field]);
-
-  // const handleSubmit = () => {
-  //   API.postCheckRegister(getParsedFormData())
-  //     .then(() => {
-  //       Actions.registerMedicalHistory({ registerData: getParsedFormData() });
-  //     })
-  //     .catch((error) => {
-  //       setFormState({
-  //         ...formState,
-  //         errorUserExist: error.response.data.constraints
-  //       });
-  //       Toast.show({
-  //         text: error.response.data.message,
-  //         duration: 3000
-  //       });
-  //     });
-  // };
 
   const handleChange = (name, newValue) => {
     setFormState({
@@ -94,8 +49,21 @@ const Register = () => {
     });
   };
 
-  const renderErrorUserExist = () =>
-    formState.errorUserExist.map((error) => <Text>{error.errors[0]}</Text>);
+  const handleSubmit = () => {
+    const body = {
+      ...dummyData,
+      ...formState.values
+    };
+
+    Api.postCheckRegister(body).then(
+      () => {
+        Actions.registerStepTwo({ stepOneValues: formState.values });
+      },
+      (error) => {
+        Toast.show({ text: error.response.data.message });
+      }
+    );
+  };
 
   return (
     <Container>
@@ -106,7 +74,6 @@ const Register = () => {
       />
       <Content style={styles.container}>
         <Form style={styles.loginForm}>
-         
           <TextInput
             label="Username"
             onChangeText={(newValue) => handleChange('username', newValue)}
@@ -121,6 +88,12 @@ const Register = () => {
             alertText={hasError('email') ? formState.errors.email[0] : null}
           />
           <TextInput
+            label="No telepon"
+            keyboardType="phone-pad"
+            onChangeText={(newValue) => handleChange('noTelp', newValue)}
+            alertText={hasError('noTelp') ? formState.errors.noTelp[0] : null}
+          />
+          <TextInput
             label="Password"
             secureTextEntry
             onChangeText={(newValue) => handleChange('password', newValue)}
@@ -132,17 +105,13 @@ const Register = () => {
             label="Confirm Password"
             secureTextEntry
             onChangeText={(newValue) =>
-              handleChange('confirmPassword', newValue)
-            }
+              handleChange('confirmPassword', newValue)}
             alertText={
               hasError('confirmPassword')
                 ? formState.errors.confirmPassword[0]
                 : null
             }
           />
-          <View>
-            {formState.errorUserExist !== null ? renderErrorUserExist() : null}
-          </View>
         </Form>
         <View style={styles.btnBundle}>
           <View>
@@ -150,16 +119,13 @@ const Register = () => {
               iconRight
               style={styles.button}
               full
-              onPress={() => Actions.registerStepTwo()}
-              // disabled={!formState.isValid}
+              onPress={handleSubmit}
+              disabled={!formState.isValid}
             >
-              <Icon
-                name="arrow-forward"
-                style={styles.icon}
-              />
+              <Icon name="arrow-forward" style={styles.icon} />
             </Button>
-            </View>
           </View>
+        </View>
       </Content>
     </Container>
   );

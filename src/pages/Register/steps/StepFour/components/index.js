@@ -1,1 +1,1 @@
-export { default as TambahPenyakit } from './TambahPenyakit';
+export { default as MedicalHistoryInput } from './MedicalHistoryInput';

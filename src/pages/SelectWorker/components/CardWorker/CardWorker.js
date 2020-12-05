@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image, View } from 'react-native';
-import { Card, CardItem, Text } from 'native-base';
+import { Card,Thumbnail, CardItem, Text } from 'native-base';
 import styles from './styles';
 
 const propTypes = {
@@ -18,18 +18,18 @@ const CardWorker = (props) => {
   const { name, price, distance, photoSource, onPress } = props;
 
   return (
-    <Card style={styles.root}>
-      <CardItem button style={styles.content} onPress={onPress}>
-        <View style={styles.imageContainer}>
-          <Image style={styles.image} source={photoSource} />
-        </View>
-        <View style={styles.information}>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.price}>{price}</Text>
-          <Text style={styles.distance}>{distance}</Text>
-        </View>
-      </CardItem>
-    </Card>
+    <View style={styles.card}>
+      <View noShadow style={styles.bundle}>
+        <CardItem button style={styles.cardItem} onPress={onPress}>
+          <Thumbnail source={photoSource} style={styles.img} />
+          <View style={styles.subcard}>
+            <Text style={styles.textSubcard}>{name}</Text>
+            <Text style={styles.doneSubcard}>{distance}</Text>
+            <Text style={styles.done2Subcard}>Rp. {price}</Text>
+          </View>
+        </CardItem>
+      </View>
+    </View>
   );
 };
 

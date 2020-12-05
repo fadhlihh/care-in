@@ -57,6 +57,11 @@ module.exports = {
     justifyContent: 'space-around'
   },
 
+  text:{
+    fontSize:18,
+    color:'white'
+  },
+
   textseparator:{
     color:'grey'
   },
@@ -68,7 +73,21 @@ module.exports = {
   },
   
   button_save:{
-    borderRadius:20,
-    marginHorizontal:'7%',
+    borderRadius:16,
+    backgroundColor:'#497CFB',
+    marginVertical:26,
+    height:60
+  },
+
+  preRegister:{
+    fontSize:16,
+    fontWeight:'300',
+    color: 'rgba(6, 44, 60, 0.5)'
+  },
+
+  register:{
+    fontSize:16,
+    fontWeight:'bold',
+    color: 'rgba(6, 44, 60, 0.9)'
   }
 };

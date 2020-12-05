@@ -69,12 +69,14 @@ const Login = (props) => {
   return (
     <View>
       <Header />
-      <Button transparent onPress={() => Actions.pop()}>
-        <Icon
-          name="chevron-back-outline"
-          style={{ color: 'white', fontSize: 30, position: 'absolute' }}
-        />
-      </Button>
+      <View style={{ position: 'absolute',marginTop:5 }}>
+        <Button transparent onPress={() => Actions.loginWorker()}>
+          <Icon
+            name="chevron-back-outline"
+            style={{ color: 'white', fontSize: 36 }}
+          />
+        </Button>
+      </View>
       <View style={styles.formContainer}>
         <Form style={styles.loginForm}>
           <TextInput
@@ -86,13 +88,12 @@ const Login = (props) => {
             label="Password"
             onChangeText={(newValue) => handleChange('password', newValue)}
           />
-
           <Button
             full
             onPress={() => handleSubmit()}
             style={styles.button_save}
           >
-            <Text>Masuk</Text>
+            <Text><Text style={styles.text}>Masuk</Text></Text>
           </Button>
         </Form>
       </View>

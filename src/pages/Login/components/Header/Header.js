@@ -45,11 +45,11 @@ const StyledHeader = (props) => {
         />
         <Text style={styles.text}>Care.In</Text>
       </View>
-      <View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
+      <View style={{ position: 'absolute', alignSelf: 'flex-end',marginTop:5 }}>
         <Button transparent onPress={() => Actions.loginWorker()}>
           <Icon
             name="medkit-outline"
-            style={{ color: 'white', fontSize: 36 }}
+            style={{ color: 'white', fontSize: 30 }}
           />
         </Button>
       </View>

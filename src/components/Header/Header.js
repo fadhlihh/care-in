@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Header, Title, Button, Left, Right, Body, Icon } from 'native-base';
+import { Header, Text, Title, Button, Left, Right, Body, Icon } from 'native-base';
+import styles from './styles';
 
 const propTypes = {
   iconName: PropTypes.string.isRequired,
@@ -14,16 +15,16 @@ const StyledHeader = (props) => {
   const { iconName, onPress, title } = props;
 
   return (
-    <Header>
+    <Header style={styles.header}>
       <Left>
         <Button transparent onPress={onPress}>
-          <Icon name={iconName} />
+          <Icon name={iconName} style={styles.icon}/>
         </Button>
       </Left>
-      <Body>
-        <Title>{title}</Title>
+      <Body style={styles.body}>
+        <Text style={styles.text}>{title}</Text>
       </Body>
-      <Right />
+      <Right/>
     </Header>
   );
 };

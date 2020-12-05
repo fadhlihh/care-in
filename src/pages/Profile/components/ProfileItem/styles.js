@@ -2,31 +2,39 @@ const { Directions } = require('react-native-gesture-handler');
 const { Right } = require('native-base');
 
 module.exports = {
-  root: {
-    marginVertical: '20%',
-    backgroundColor: '#00A3FF'
+  box:{
+    overflow: 'hidden', 
+    paddingBottom:  3,
+    borderRadius:73,
   },
-  sub_header: {
-    marginTop: '-10%'
+  boxWrapper:{
+    backgroundColor: '#fff',
+    width: 36,
+    height: 36,
+    borderRadius:73,
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.4,
+    shadowRadius: 1,
+    elevation: 2,
   },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 100,
-    alignItems: 'center',
-    marginHorizontal: '35%'
+  stylesIcon:{
+    color:'red',
+    fontSize:25,
+    marginVertical:5,
+    marginHorizontal:5
   },
-  text: {
-    color: 'white',
-    fontSize: 20,
-    textAlign: 'center',
-    marginTop: 10,
-    fontWeight: 'bold'
+  body:{
+    marginLeft:'5%'
   },
-  sub_text: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
-    fontWeight: 'bold'
+  text:{
+    color:'grey',
+    fontSize:12,
+    color:' rgba(6, 44, 60, 0.4)'
+  },
+  textNote:{
+    color: 'rgba(6, 44, 60, 0.9)',
+    fontSize:16
   }
+
 };

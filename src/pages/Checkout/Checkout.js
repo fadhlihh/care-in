@@ -4,6 +4,7 @@ import { Image } from 'react-native';
 import {
   Container,
   Content,
+  Thumbnail,
   Text,
   Footer,
   Button,
@@ -61,44 +62,68 @@ const Checkout = (props) => {
         onPress={() => Actions.pop()}
       />
       <Content>
-        <Image
-          style={styles.photos}
-          source={{ uri: StringBuilder.addBaseURL(worker.foto) }}
-        />
-        <Text>{`dr. ${worker.nama}`}</Text>
-        <Text>{`Harga : ${worker.harga}`}</Text>
-        <Text>{`Jarak : ${worker.jarak.teks}`}</Text>
-        <View>
-          <MapView
-            ref={(ref) => {
-              mapRef = ref;
-            }}
-            style={styles.mapView}
-            region={{
-              latitude: userPosition.latitude,
-              longitude: userPosition.longitude,
-              latitudeDelta: 0.15,
-              longitudeDelta: 0.15
-            }}
-            onLayout={() =>
-              mapRef.fitToCoordinates([userPosition, workerPosition], {
-                edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-                animated: true
-              })
-            }
-          >
-            <Marker coordinate={userPosition} onMapReady title="Lokasi Kamu" />
-            <Marker coordinate={workerPosition} title="Lokasi Nakes" />
-          </MapView>
-        </View>
-        <Text>{`Biaya transportasi : ${worker.biayaTranspor}`}</Text>
-        <Text>{`Total : ${worker.biayaTranspor + worker.harga}`}</Text>
-      </Content>
-      <Footer>
-        <Button onPress={handleSubmit}>
-          <Text>Order</Text>
-        </Button>
-      </Footer>
+          <View>
+            <MapView
+              ref={(ref) => {
+                mapRef = ref;
+              }}
+              style={styles.mapView}
+              region={{
+                latitude: userPosition.latitude,
+                longitude: userPosition.longitude,
+                latitudeDelta: 0.15,
+                longitudeDelta: 0.15
+              }}
+              onLayout={() =>
+                mapRef.fitToCoordinates([userPosition, workerPosition], {
+                  edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+                  animated: true
+                })
+              }
+            >
+              <Marker coordinate={userPosition} onMapReady title="Lokasi Kamu" />
+              <Marker coordinate={workerPosition} title="Lokasi Nakes" />
+            </MapView>
+          </View>
+
+          <View style={styles.root}>
+
+          <View style={styles.cardProfil}>
+            <View>
+              <Thumbnail source={{uri: StringBuilder.addBaseURL(worker.foto)}} style={styles.img} />
+            </View>
+            <View style={styles.subCardProfil}>
+              <Text style={styles.textProfil}>{`dr. ${worker.nama}`}</Text>
+              <Text style={styles.doneProfil}>{`${worker.jarak.teks}`}</Text>
+            </View>
+          </View>
+          <Text style={styles.textSubHeading}>Detail Pembayaran</Text>
+          <View>
+            <View style={styles.detailCheckOut}>
+              <Text style={styles.titleCheckOut}>Jasa</Text>
+              <Text style={styles.titleCheckOut}>{`${worker.harga}`}</Text>
+            </View>
+            <View style={styles.detailCheckOut}>
+              <Text style={styles.titleCheckOut}>Biaya Transportasi</Text>
+              <Text style={styles.titleCheckOut}>20.000</Text>
+            </View>
+            <View style={styles.detailCheckOut}>
+              <Text style={styles.totalCheckOut}>Total Pembayaran</Text>
+              <Text style={styles.totalCheckOut}>120.000</Text>
+            </View>
+          </View>
+          <View>
+            <Button
+              full
+              primary
+              onPress={handleSubmit}
+              style={styles.button_save}
+            >
+              <Text><Text style={styles.text}>Pesan</Text></Text>
+            </Button>
+          </View>
+      </View>
+     </Content>
     </Container>
   );
 };

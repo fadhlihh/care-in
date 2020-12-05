@@ -12,17 +12,27 @@ module.exports = {
     marginLeft: 'auto', 
     borderRadius: 200,
     color: '#497CFB',
-    elevation:5,
   },
   icon:{
-    paddingHorizontal: 5,
-    paddingLeft: '5%',
-    color: 'white'
+    color: 'white',
+    fontSize:50,
+    textAlign:'center',
+  },
+  btn:{
+    marginVertical:5
   },
   btnBundle:{
-    flex:1,
-    flexDirection:'column',
-    justifyConten:'flex-end',
     marginTop:50,
-  }
+    alignSelf: 'flex-end',
+  },
+  box:{
+    paddingBottom:  4,
+  },
+  boxWrapper:{
+    backgroundColor: '#497CFB',
+    width: 56,
+    height: 55,
+    borderRadius:196,
+    elevation: 3,
+  },
 };

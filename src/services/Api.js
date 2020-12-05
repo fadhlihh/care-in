@@ -1,6 +1,7 @@
 import get from './Get';
 import post from './Post';
 import put from './Put';
+import drop from './Drop';
 import config from './config';
 
 // Get
@@ -10,6 +11,8 @@ const getWorker = async (params) =>
   get(`nakes`, await config.withToken(params));
 const getTransaction = async (params) =>
   get('transaksi', await config.withToken(params));
+const getTransactionWorker = async (params) =>
+  get('transaksi?user=nakes', await config.withToken(params));
 const getMedicalHitory = async (id, params) =>
   get(`riwayat-kesehatan/${id}`, await config.withToken(params));
 
@@ -31,16 +34,19 @@ const putTransaction = async (id, data) =>
   put(`transaksi/${id}`, data, await config.withToken());
 const putMedicalHistory = async (id, data) =>
   put(`riwayat-kesehatan/${id}`, data, await config.withToken());
+const putWorker = async (id, data) =>
+  put(`nakes/${id}`, data, await config.withToken());
 
 // Delete
 const deleteMedicalHistory = async (id) =>
-  delete (`riwayat-kesehatan/${id}`, await config.withToken());
+  drop(`riwayat-kesehatan/${id}`, await config.withToken());
 
 const Api = {
   getCheckAuth,
   getUser,
   getWorker,
   getTransaction,
+  getTransactionWorker,
   getMedicalHitory,
   postRegister,
   postCheckRegister,
@@ -51,6 +57,7 @@ const Api = {
   putUser,
   putTransaction,
   putMedicalHistory,
+  putWorker,
   deleteMedicalHistory
 };
 

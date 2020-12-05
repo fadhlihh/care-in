@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ImageBackground } from 'react-native';
+import { View, ImageBackground, Dimensions  } from 'react-native';
 import PropTypes from 'prop-types';
 import { Text, Button, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
@@ -13,28 +13,32 @@ const defaultProps = {
   name: 'User'
 };
 
+const win = Dimensions.get('window');
+const ratio = win.width/360; 
+
 const StyledHeader = (props) => {
   const { name, ...rest } = props;
 
   return (
     <View
-      style={{ flex: 1, flexDirection: 'column', position: 'relative' }}
       noShadow
       {...rest}
     >
       <ImageBackground
-        style={styles.background}
+        style={{width: win.width,
+          height: 301 * ratio,}}
         source={require('../../../../assets/WavyBackground.png')}
       />
       <View style={styles.textBundle}>
         <Text style={styles.text}>{`Halo ${name}`}</Text>
-        <Text style={styles.welcomeText}>Kami siap datang membantu!</Text>
+        <Text style={styles.welcomeText}>{`Kami siap datang \nmembantu!`}</Text>
       </View>
+
       <View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
         <Button transparent onPress={() => Actions.profile()}>
           <Icon
             name="person-circle-outline"
-            style={{ color: 'white', fontSize: 36 }}
+            style={{ color: 'white', fontSize: 30 }}
           />
         </Button>
       </View>

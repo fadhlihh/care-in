@@ -94,61 +94,6 @@ const SelectWorker = (props) => {
         <View><Text style={styles.textNothingDefault}>{`Tenaga kesehatan \n tidak ada yang tersedia`}</Text></View>
       </View>
 
-      //availble
-
-      // <Card style={styles.card}>
-      //   <CardItem>
-      //       <Thumbnail
-      //         source={require('../../assets/me_here.jpeg')}
-      //         style={styles.img}
-      //       />
-      //       <View style={styles.subcard}>
-      //         <Text style={styles.textSubcard}>Marcell Antonius</Text>
-      //         <Text style={styles.doneSubcard}>14.6 km</Text>
-      //         <Text style={styles.done2Subcard}> Rp. 100.000</Text>
-      //       </View>
-      //   </CardItem>
-      // </Card>
-
-      //checkout
-      // <View style={styles.root}>
-      //   <View style={{backgroundColor:'grey',width:'auto',height:291}}>
-      //     <Text style={{textAlign:'center',marginVertical:'30%'}}>Getting Maps API</Text>
-      //   </View>
-      //   <View style={styles.cardProfil}>
-      //     <View>
-      //       <Thumbnail source={require('../../assets/me_here.jpeg')}style={styles.img} />
-      //     </View>
-      //     <View style={styles.subCardProfil}>
-      //        <Text style={styles.textProfil}>Marcell Antonius</Text>
-      //        <Text style={styles.doneProfil}>14.6 km</Text>
-      //      </View>
-      //   </View>
-      //   <Text style={styles.textSubHeading}>Detail Pembayaran</Text>
-      //   <View>
-      //     <View style={styles.detailCheckOut}>
-      //       <Text style={styles.titleCheckOut}>Jasa</Text>
-      //       <Text style={styles.titleCheckOut}>100.000</Text>
-      //     </View>
-      //     <View style={styles.detailCheckOut}>
-      //       <Text style={styles.titleCheckOut}>Biaya Transportasi</Text>
-      //       <Text style={styles.titleCheckOut}>20.000</Text>
-      //     </View>
-      //     <View style={styles.detailCheckOut}>
-      //       <Text style={styles.totalCheckOut}>Total Pembayaran</Text>
-      //       <Text style={styles.totalCheckOut}>120.000</Text>
-      //     </View>
-      //   </View>
-      //   <View>
-      //     <Button
-      //       full
-      //       primary
-      //       style={styles.button_save}
-      //     >
-      //       <Text>Pesan</Text>
-      //     </Button>
-      //   </View>
-      // </View>
     );
   };
 

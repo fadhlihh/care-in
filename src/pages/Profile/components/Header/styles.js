@@ -21,8 +21,8 @@ module.exports = {
     color:'white',
     fontSize:24,
     textAlign:"center",
-    marginTop:10,
     fontWeight:'bold',
+    marginTop:15
   },
   sub_text:{
     color:'white',
@@ -35,14 +35,18 @@ module.exports = {
     flex: 1,
     flexDirection: "column"
   },
-  image: {
-    width:250,
-    height:290,
+  img: { 
+    width: 150, 
+    height: 150, 
+    borderRadius: 75 ,
+  },
+  imageBundle:{
+    alignSelf:'center',
   },
   textBundle:{
     marginHorizontal:36,
     position:'absolute',
-    marginVertical:'15%',
+    marginVertical:'11%',
     alignSelf: 'center',
   },
   welcomeText:{
@@ -53,9 +57,7 @@ module.exports = {
   },
   background:{
     width:'auto',
-    height:330,
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
+    height:350,
+    marginTop:-50
   }
 };

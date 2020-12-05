@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { Label, Item, Input, Text } from 'native-base';
+import styles from './styles';
 
 const propTypes = {
   label: PropTypes.string,
@@ -24,12 +25,12 @@ const TextInput = (props) => {
   return (
     <View>
       <Item floatingLabel>
-        <Label>{label}</Label>
+        <Label style={styles.label}>{label}</Label>
         {iconPosition === 'left' ? icon : null}
-        <Input onChangeText={onChangeText} {...rest} />
+        <Input onChangeText={onChangeText} {...rest}  style={styles.input}/>
         {iconPosition === 'right' ? icon : null}
       </Item>
-      <Text>{alertText}</Text>
+      <Text style={{marginLeft:'5%',fontSize:12,color:'red'}}>{alertText}</Text>
     </View>
   );
 };

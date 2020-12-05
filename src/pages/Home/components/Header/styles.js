@@ -2,11 +2,6 @@ const { Directions } = require("react-native-gesture-handler");
 const { Right } = require("native-base");
 
 module.exports = {
-  root: {
-    marginVertical:'30%',
-    flex: 1,
-    flexDirection: "column"
-  },
   image: {
     width:250,
     height:290,
@@ -14,7 +9,7 @@ module.exports = {
   textBundle:{
     marginHorizontal:36,
     position:'absolute',
-    marginVertical:'35%',
+    marginVertical:'30%'
   },
   text:{
     color:'white',
@@ -24,13 +19,10 @@ module.exports = {
     color:'white',
     fontSize:28,
     fontWeight:'bold',
-    paddingRight:'20%'
   },
   background:{
     width:'auto',
-    height:330,
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
+    height:350,flex:1,
+    marginTop:0,
   }
 };

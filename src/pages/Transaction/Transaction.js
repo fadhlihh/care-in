@@ -5,8 +5,8 @@ import { Actions } from 'react-native-router-flux';
 import { Header } from '../../components';
 import { CardTransaction } from './components';
 import Api from '../../services';
-import { StringBuilder } from '../../helpers';
-import mockData from './mockData';
+import { LocalStorage, StringBuilder, DateFormatter } from '../../helpers';
+import { UserType } from '../../constant';
 
 const propTypes = {};
 
@@ -17,11 +17,12 @@ const Transaction = () => {
     transactionHistory: [],
     activeTransaction: {},
     isLoaded: false,
-    transactionStatus: 'no-transaction'
+    transactionStatus: 'no-transaction',
+    userType: UserType.PATIENT
   });
 
   useEffect(() => {
-    const fetchTransaction = async () => {
+    const fetchTransaction = async (userType) => {
       const params = {
         params: {
           limit: 5,
@@ -29,38 +30,67 @@ const Transaction = () => {
         }
       };
 
-      Api.getTransaction(params).then(
-        (res) => {
-          if (res.transaksiBerjalan !== undefined) {
-            Api.getWorker({
-              params: { id: res.transaksiBerjalan.nakesId }
-            }).then((response) => {
+      if (userType === UserType.PATIENT) {
+        Api.getTransaction(params).then(
+          (res) => {
+            if (res.transaksiBerjalan !== undefined) {
+              Api.getWorker({
+                params: { id: res.transaksiBerjalan.nakesId }
+              }).then((response) => {
+                setState({
+                  ...state,
+                  activeTransaction: {
+                    ...res.transaksiBerjalan,
+                    worker: response.nakes[0]
+                  },
+                  transactionStatus: 'active',
+                  isLoaded: true
+                });
+              });
+            } else if (res.riwayatTransaksi.length !== 0) {
               setState({
                 ...state,
-                activeTransaction: {
-                  ...res.transaksiBerjalan,
-                  worker: response.nakes[0]
-                },
-                transactionStatus: 'active',
+                transactionHistory: res.riwayatTransaksi,
+                transactionStatus: 'inactive',
                 isLoaded: true
               });
-            });
-          } else if (res.riwayatTransaksi.length !== 0) {
-            setState({
-              ...state,
-              transactionHistory: res.riwayatTransaksi,
-              transactionStatus: 'inactive',
-              isLoaded: true
-            });
+            }
+          },
+          (error) => {
+            Toast.show({ text: error.response.data.message });
           }
-        },
-        (error) => {
-          Toast.show({ text: error.response.data.message });
-        }
-      );
+        );
+      } else {
+        Api.getTransactionWorker(params).then(
+          (res) => {
+            if (res.riwayatTransaksi.length !== 0) {
+              setState({
+                ...state,
+                transactionHistory: res.riwayatTransaksi,
+                transactionStatus: 'inactive',
+                isLoaded: true,
+                userType
+              });
+            }
+          },
+          (error) => {
+            Toast.show({ text: error.response.data.message });
+          }
+        );
+      }
     };
 
-    fetchTransaction();
+    const setUserType = async () => {
+      const userType = await LocalStorage.getUserType();
+      setState({
+        ...state,
+        userType
+      });
+      console.log('user setted ', userType);
+      return userType;
+    };
+
+    setUserType().then((userType) => fetchTransaction(userType));
   }, []);
 
   const renderTransactionCard = () => {
@@ -73,8 +103,7 @@ const Transaction = () => {
           photoSource={{
             uri: StringBuilder.addBaseURL(state.activeTransaction.worker.foto)
           }}
-          status={state.activeTransaction.status}
-          date={state.activeTransaction.waktuDibuat}
+          status={state.activeTransaction.sakit}
           onPress={() => Actions.chat()}
         />
       );
@@ -83,13 +112,19 @@ const Transaction = () => {
     state.transactionHistory.forEach((item) =>
       cardList.push(
         <CardTransaction
-          name="History"
+          key={item.id}
+          name={
+            state.userType === UserType.PATIENT
+              ? item.nakes.nama
+              : item.pasien.nama
+          }
           photoSource={{
-            // uri: StringBuilder.addBaseURL(state.activeTransaction.worker.foto)
-            uri: 'https://reactnative.dev/img/tiny_logo.png'
+            uri: StringBuilder.addBaseURL(item.nakes.foto)
           }}
-          status="selesai"
-          date={item.waktuDibuat}
+          status={item.sakit}
+          cost={item.totalBiaya}
+          date={DateFormatter.getLegibleDate(item.waktuDibuat)}
+          worker={state.userType === UserType.PATIENT}
         />
       )
     );
@@ -103,6 +138,7 @@ const Transaction = () => {
     }
     return renderTransactionCard();
   };
+
   return (
     <Container>
       <Header

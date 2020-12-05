@@ -19,21 +19,15 @@ const StyledHeader = (props) => {
   const { title,item,icon,warna, ...rest } = props;
 
   return (
-    // <ListItem avatar>
-    //   <Left style={{marginRight:'15%'}}>
-    //     {/* <Thumbnail style={{width:30,height:30,marginVertical:5}} source={imageSource} /> */}
-    //   </Left>
-    //   <Body style={{marginLeft:'10%'}}>
-    //     
-    //   </Body>
-    // </ListItem>
-    <ListItem avatar>
-      <Left>
-    <Icon name={icon} style={{color:'red',marginTop:'50%',fontSize:19}}/>
-      </Left>
-      <Body style={{marginLeft:'7%'}}>
-      <Text style={{color:'grey'}}>{title}</Text>
-      <Text note style={{color:'black'}}>{item}</Text>
+    <ListItem noBorder avatar >
+      <View style={styles.box}>
+        <View style={styles.boxWrapper}>
+        <Icon name={icon} style={styles.stylesIcon}/>
+        </View>
+      </View>
+      <Body style={styles.body}>
+      <Text style={styles.text}>{title}</Text>
+      <Text note style={styles.textNote}>{item}</Text>
       </Body>
     </ListItem>
   );

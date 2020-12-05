@@ -8,13 +8,25 @@ const propTypes = {
   name: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   onEditPress: PropTypes.func.isRequired,
-  onBackPress: PropTypes.func.isRequired
+  onBackPress: PropTypes.func.isRequired,
+  pictureSource: PropTypes.objectOf(PropTypes.string)
 };
 
-const defaultProps = {};
+const defaultProps = {
+  pictureSource: {
+    uri: 'https://dummyimage.com/400x400/c4c4c4/ffffff&text=Profile+Picture'
+  }
+};
 
 const StyledHeader = (props) => {
-  const { name, username, onEditPress, onBackPress, ...rest } = props;
+  const {
+    name,
+    username,
+    onEditPress,
+    onBackPress,
+    pictureSource,
+    ...rest
+  } = props;
 
   return (
     <View
@@ -27,11 +39,9 @@ const StyledHeader = (props) => {
         source={require('../../../../assets/WavyBackground.png')}
       />
       <View style={styles.textBundle}>
-        <Image
-          style={{ width: 150, height: 150, borderRadius: 75 }}
-          large
-          source={require('../../../../assets/marcell-white.jpg')}
-        />
+        <View style={styles.imageBundle}>
+          <Image style={styles.img} large source={pictureSource} />
+        </View>
         <Text style={styles.text}>{name}</Text>
         <Text style={styles.sub_text}>{username}</Text>
       </View>
@@ -39,7 +49,15 @@ const StyledHeader = (props) => {
         <Button transparent onPress={onEditPress}>
           <Icon
             name="create-outline"
-            style={{ color: 'white', fontSize: 36 }}
+            style={{ color: 'white', fontSize: 30 }}
+          />
+        </Button>
+      </View>
+      <View style={{ position: 'absolute', alignSelf: 'flex-start' }}>
+        <Button transparent onPress={onBackPress}>
+          <Icon
+            name="chevron-back-outline"
+            style={{ color: 'white', fontSize: 30 }}
           />
         </Button>
       </View>

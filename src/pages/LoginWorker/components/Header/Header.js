@@ -39,9 +39,9 @@ const StyledHeader = (props) => {
       <View style={styles.textBundle}>
         <Icon
           name="medkit-outline"
-          style={{ color: 'white', textAlign: 'center', fontSize: 130 }}
+          style={{ color: 'white', textAlign: 'center', fontSize: 100 }}
         />
-        <Text style={styles.text}>Masuk Sebagai Tenaga Kesehatan</Text>
+        <Text style={styles.text}>{`Masuk Sebagai\n Tenaga Kesehatan`}</Text>
       </View>
       <View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
         {/* <Button transparent  onPress={() => Actions.loginWorker()}>

@@ -37,17 +37,17 @@ module.exports = {
   },
 
   formContainer: {
-    marginTop:'75%',
-    height: '40%',
+    marginTop:'80%',
+    height: '45%',
     // paddingTop: CONST.LOGO_SIZE / 2 ,
     paddingLeft: SPACING.PADDING_HORIZONTAL,
     paddingRight: SPACING.PADDING_HORIZONTAL
   },
 
   loginForm: {
-    flex: 2,
+    flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-around'
+    justifyContent: 'center'
   },
 
   separator: {
@@ -61,6 +61,11 @@ module.exports = {
     color:'grey'
   },
 
+  text:{
+    fontSize:18,
+    color:'white'
+  },
+
   registerContainer: {
     flex: 1,
     flexDirection: 'column',
@@ -70,7 +75,7 @@ module.exports = {
   button_save:{
     borderRadius:20,
     marginHorizontal:'7%',
-    marginTop:'5%',
+    marginTop:'10%',
     backgroundColor:'#497CFB'
   }
 };

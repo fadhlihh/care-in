@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Image} from 'react-native';
 import PropTypes from 'prop-types';
-import { Text,CardItem, Body, Title,Subtitle } from 'native-base';
+import { Text,CardItem, Body, Title,Subtitle, Thumbnail } from 'native-base';
 import styles from './styles';
 
 const propTypes = {
@@ -17,14 +17,16 @@ const StyledHeader = (props) => {
   const { penyakit,tanggal, ...rest } = props;
 
   return (
-    <CardItem>
-      <Body style={styles.root}>
-        <View style={styles.bubble}>
-        <Text style={{color:'black',fontSize:16}}>{penyakit}</Text>
-        <Text style={{color:'black',fontSize:12}}>{tanggal}</Text>
-        </View>
-      </Body>
-    </CardItem>
+    <View style={styles.card}>
+      <View noShadow >
+        <CardItem style={styles.bundle}>
+          <View style={styles.subcardBundle}>
+          <Text style={styles.penyakit}>{penyakit}</Text>
+          <Text style={styles.tanggal}>{tanggal}</Text>
+          </View>
+        </CardItem>
+      </View>
+    </View>
   );
 };
 

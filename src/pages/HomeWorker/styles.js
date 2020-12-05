@@ -1,9 +1,53 @@
 import SPACING from '../../theme/Spacing';
 
+const PROFILE_PICTURE_SIZE = 40;
+
 module.exports = {
   content: {
     backgroundColor: 'green'
   },
+  cardOne:{
+    marginHorizontal:40
+  },
+  subCardOne: {
+    marginLeft: '-20%'
+  },
+  nameSubCardOne: {
+    color: 'rgba(6, 44, 60, 0.9)',
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  statusSubCardOne: {
+    color: 'rgba(6, 44, 60, 0.9)',
+    fontSize: 12
+  },
+  btnSubCardOne: {
+    marginTop: 5,
+  },
+  btnCancelDetailOne: {
+    backgroundColor: '#EB5757',
+    opacity: 0.2,
+    width: 85,
+    height: 32,
+    borderRadius: 8
+  },
+  btnCancelTextOne: {
+    fontSize: 10,
+    color: 'red'
+  },
+  btnSuccessDetailOne: {
+    backgroundColor: '#27AE60',
+    opacity: 0.3,
+    width: 75,
+    height: 32,
+    marginLeft: 4,
+    borderRadius: 8
+  },
+  btnSuccessTextOne: {
+    fontSize: 10,
+    color: 'green'
+  },
+
   heading: {
     flexDirection: 'row',
     marginHorizontal: 16,
@@ -12,12 +56,17 @@ module.exports = {
     justifyContent: 'space-between'
   },
   thumbnail: {
-    borderRadius: 20
+    borderRadius: PROFILE_PICTURE_SIZE,
+    width: PROFILE_PICTURE_SIZE,
+    height: PROFILE_PICTURE_SIZE,
+    aspectRatio: 1 / 1,
+    backgroundColor: 'white',
+    borderColor: '#497CFB',
+    borderWidth: 2
   },
   infoMoney: {
     flexDirection: 'row',
     marginHorizontal: 36,
-    marginTop: 20,
     marginBottom: '7%',
     justifyContent: 'space-between'
   },
@@ -44,12 +93,11 @@ module.exports = {
     color: 'rgba(6, 44, 60, 0.9)'
   },
   subCardOne: {
-    marginLeft: '-20%'
   },
   nameSubCardOne: {
     color: 'rgba(6, 44, 60, 0.9)',
     fontWeight: 'bold',
-    fontSize: 18
+    fontSize: 18, 
   },
   statusSubCardOne: {
     color: 'rgba(6, 44, 60, 0.9)',
@@ -80,25 +128,31 @@ module.exports = {
   },
   btnSuccessTextOne: {
     fontSize: 10,
-    color: 'green'
+    color: 'green',
+    flex:1,
   },
   btnSuccessDetailThree: {
     width: 72,
     height: 32,
     marginLeft: 4,
-    borderRadius: 8
+    borderRadius: 8,
   },
   btnCancelDetailThree: {
     backgroundColor: '#EB5757',
     opacity: 0.2,
     width: 72,
     height: 32,
-    borderRadius: 8
+    borderRadius: 8,
   },
+  
+  chatTextBundle:{
+    flex:1,flexDirection:'row',
+    alignSelf:'center',
+  },
+  
   btnCancelTextThree: {
     fontSize: 10,
     color: 'red',
-    textAlign: 'center'
   },
   btnSuccessTextThree: {
     fontSize: 10,
@@ -113,8 +167,8 @@ module.exports = {
 
   subtitle: {
     flexDirection: 'row',
-    marginTop: 40,
-    marginBottom: '7%',
+    marginTop: 13,
+    marginBottom: 8,
     justifyContent: 'space-between'
   },
   chatSubCardOne: {
@@ -122,16 +176,38 @@ module.exports = {
     width: 79,
     height: 32,
     marginTop: 45,
-    borderRadius: 8
+    borderRadius: 8,
+    
   },
   chatTextSubCardOne: {
     fontSize: 10,
     color: 'white',
     textAlign: 'center'
   },
-  card: {
-    borderRadius: 24,
-    height: 106
+  card:{
+    overflow: 'hidden', 
+    paddingBottom:  5,
+    paddingRight:5,
+    borderRadius:24,
+  },
+  bundle:{
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    width:'auto',
+    height:106,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.7,
+    shadowRadius: 1,
+    elevation: 5,
+    borderRadius:24
+  },
+  secondBundle:{
+    marginHorizontal:16,
+    marginVertical:16
+  },
+  infoSubCardOne:{
+    color: 'rgba(6, 44, 60, 0.9)', 
+    fontSize: 12
   },
   subcard: {},
   cardBundle: {
@@ -173,7 +249,6 @@ module.exports = {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginBottom: 85
   },
   btnTrash: {
     backgroundColor: '#EB5757',
@@ -192,5 +267,27 @@ module.exports = {
   },
   cek: {
     color: 'red'
-  }
+  },
+  card:{
+    overflow: 'hidden', 
+    paddingBottom:  5,
+    paddingRight:5,
+    borderRadius:24,
+  },
+  bundle: {
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    width: 'auto',
+    height: 106,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.7,
+    shadowRadius: 1,
+    elevation: 5,
+    borderRadius: 24,
+  },
+  chatBundle: {
+    alignSelf: 'center',
+    marginRight: '-13%',
+    marginTop:5
+  },
 };

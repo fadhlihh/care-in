@@ -53,9 +53,7 @@ module.exports = {
   },
   background:{
     width:'auto',
-    height:330,
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
+    height:350,
+    marginTop:-50
   }
 };

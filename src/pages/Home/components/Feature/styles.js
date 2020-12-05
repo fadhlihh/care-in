@@ -14,7 +14,7 @@ module.exports = {
     zIndex: 2,
     shadowColor: 'black',
     shadowOpacity: 0.9,
-    elevation: 6
+    elevation: 4
   },
   stack_two: {
     position: 'absolute',
@@ -24,7 +24,7 @@ module.exports = {
     backgroundColor: '#FFB167',
     borderRadius: 10,
     zIndex: 1,
-    elevation: 7
+    elevation: 6
   },
   img: {
     marginHorizontal: 10,

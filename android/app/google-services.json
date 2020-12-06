@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "378976790564",
+    "firebase_url": "https://carein-284214.firebaseio.com",
+    "project_id": "carein-284214",
+    "storage_bucket": "carein-284214.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378976790564:android:f26d5796f8584a547d50b1",
+        "android_client_info": {
+          "package_name": "com.carein"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "378976790564-eovfn4irggpl3fjt8vklk4u8gub8adob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeJcl9kvCi4obqqbgI9GhcM7dxjbbzJmQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "378976790564-eovfn4irggpl3fjt8vklk4u8gub8adob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

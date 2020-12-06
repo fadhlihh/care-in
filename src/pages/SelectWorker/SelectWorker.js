@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator ,View} from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { Container, Content, Toast, Text, Card, CardItem,Button, Left,Thumbnail} from 'native-base';
+import { Container, Content, Toast, Text } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import Geolocation from '@react-native-community/geolocation';
 import { connect } from 'react-redux';
+import { COST_ADMIN } from 'react-native-dotenv';
 import Api from '../../services';
 import { CardWorker } from './components';
 import { Header } from '../../components';
@@ -76,7 +77,7 @@ const SelectWorker = (props) => {
           key={item.id}
           name={item.nama}
           photoSource={{ uri: StringBuilder.addBaseURL(item.foto) }}
-          price={item.harga}
+          price={item.harga * COST_ADMIN}
           distance={item.jarak.teks}
           onPress={() => {
             Actions.checkout({
@@ -88,12 +89,13 @@ const SelectWorker = (props) => {
       ));
     }
     return (
-      //not avaible
-       
       <View style={styles.nothingDefault}>
-        <View><Text style={styles.textNothingDefault}>{`Tenaga kesehatan \n tidak ada yang tersedia`}</Text></View>
+        <View>
+          <Text style={styles.textNothingDefault}>
+            {`Tenaga kesehatan \n tidak ada yang tersedia`}
+          </Text>
+        </View>
       </View>
-
     );
   };
 

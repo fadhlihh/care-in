@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Image, View } from 'react-native';
-import { Card,Thumbnail, CardItem, Text } from 'native-base';
+import { View } from 'react-native';
+import { Thumbnail, CardItem, Text } from 'native-base';
 import styles from './styles';
+import { StringBuilder } from '../../../../helpers';
 
 const propTypes = {
   name: PropTypes.string.isRequired,
@@ -25,7 +26,9 @@ const CardWorker = (props) => {
           <View style={styles.subcard}>
             <Text style={styles.textSubcard}>{name}</Text>
             <Text style={styles.doneSubcard}>{distance}</Text>
-            <Text style={styles.done2Subcard}>Rp. {price}</Text>
+            <Text style={styles.done2Subcard}>
+              {`Rp. ${StringBuilder.formatCurrency(price)}`}
+            </Text>
           </View>
         </CardItem>
       </View>

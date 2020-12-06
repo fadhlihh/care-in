@@ -19,7 +19,6 @@ module.exports = {
     elevation: 2,
   },
   stylesIcon:{
-    color:'red',
     fontSize:25,
     marginVertical:5,
     marginHorizontal:5

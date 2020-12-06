@@ -21,10 +21,16 @@ const getLegibleDate = (date) => {
   return moment(date).locale('id').format('LL');
 };
 
+const getTime = (milisecond) => {
+  const date = new Date(milisecond);
+  return moment(date).format('HH:mm');
+};
+
 const DateFormatter = {
   giveZero,
   getShortDate,
-  getLegibleDate
+  getLegibleDate,
+  getTime
 };
 
 export default DateFormatter;

@@ -172,7 +172,7 @@ const MedicalHistory = (props) => {
         title="Riwayat Kesehatan"
         onPress={() => Actions.pop()}
       />
-      <Content style={{ flex: 1 }}>
+      <Content  showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
         {!state.isLoaded ? <ActivityIndicator /> : renderCardMedicalHistory()}
       </Content>
       <Button onPress={handleFabPress} style={styles.fab}>

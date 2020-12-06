@@ -168,8 +168,8 @@ const EditProfile = (props) => {
         onLeftPress={Actions.pop}
         onRightPress={handleSubmit}
       />
-      <Content style={styles.container}>
-        <Form style={styles.loginFormWorker}>
+      <Content showsVerticalScrollIndicator={false} style={styles.container}>
+        <Form style={styles.loginForm}>
           {userType === UserType.WORKER && (
             <View>
               <TextInput

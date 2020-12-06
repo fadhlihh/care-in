@@ -66,22 +66,6 @@ const Login = (props) => {
   return (
     <View>
       <Header />
-
-      {/* <View style={styles.logoContainer}>
-        <Thumbnail
-          square
-          large
-          style={styles.logoheader}
-          source={require('../../assets/masker.png')}
-        />
-        <Text style={styles.textheader}>Care In</Text>
-      </View> */}
-      {/* <View style={styles.headerContainer}>
-        <Image
-          style={styles.logo}
-          source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
-        />
-      </View> */}
       <View style={styles.formContainer}>
         <Form style={styles.loginForm}>
           <TextInput
@@ -92,6 +76,7 @@ const Login = (props) => {
           <TextInput
             label="Password"
             onChangeText={(newValue) => handleChange('password', newValue)}
+            secureTextEntry
           />
           <View>
             <Button

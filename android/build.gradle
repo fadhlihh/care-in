@@ -7,6 +7,9 @@ buildscript {
         compileSdkVersion = 28
         targetSdkVersion = 28
         playServicesVersion = "17.0.0"
+        googlePlayServicesVersion = "+" // default: "+"
+        firebaseMessagingVersion = "+" // default: "+"
+        supportLibVersion = "23.1.1" // default: 23.1.1
     }
     repositories {
         google()
@@ -14,7 +17,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:3.5.2")
-
+        classpath('com.google.gms:google-services:4.3.3')
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

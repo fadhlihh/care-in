@@ -1,99 +1,128 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { Container, Content, Text, Footer, Thumbnail, Input, Right,Icon, Button } from 'native-base';
+import {
+  Container,
+  Content,
+  Footer,
+  Input,
+  Icon,
+  Button,
+  Toast
+} from 'native-base';
+import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
+import Api, { useChat } from '../../services';
 import { Header } from '../../components';
 import { BubbleChat } from './components';
 import styles from './styles';
+import { DateFormatter, LocalStorage } from '../../helpers';
 
-const propTypes = {};
+const propTypes = {
+  listener: PropTypes.objectOf(PropTypes.any).isRequired,
+  sender: PropTypes.objectOf(PropTypes.any).isRequired,
+  transactionId: PropTypes.string.isRequired
+};
 
 const defaultProps = {};
 
-const mockData = [
-  {
-    message: 'Halo, apa kabar denganmu hari ini ada yang bisa saya bantu ? ',
-    time: '19:48',
-    worker: true
-  },
-  {
-    message: 'Hi  sdadad sdada',
-    time: '19:50',
-    worker: false
-  },
-  {
-    message: 'Halo',
-    time: '19:48',
-    worker: true
-  },
-  {
-    message: 'Hi adasdasdasd asdasd',
-    time: '19:50',
-    worker: false
-  },
-  {
-    message: 'Halo',
-    time: '19:48',
-    worker: true
-  },
-  {
-    message: 'Hi',
-    time: '19:50',
-    worker: false
-  },
-  {
-    message: 'Halo',
-    time: '19:48',
-    worker: true
-  },
-  {
-    message: 'Hi',
-    time: '19:50',
-    worker: false
-  },
-  {
-    message: 'Halo',
-    time: '19:48',
-    worker: true
-  },
-  {
-    message: 'Hi',
-    time: '19:50',
-    worker: false
-  }
-];
+const Chat = (props) => {
+  const { listener, transactionId, sender } = props;
 
-const Chat = () => {
+  const { messages, sendMessage, setMessages } = useChat(transactionId);
+
+  const [input, setInput] = useState('');
+
+  useEffect(() => {
+    const fetchChat = () => {
+      Api.getChat(transactionId).then(
+        (res) => {
+          setMessages(
+            res.chat.map((item) => {
+              return {
+                ...item,
+                time: new Date(item.waktuDibuat).getTime()
+              };
+            })
+          );
+        },
+        (error) => {
+          Toast.show({
+            text: `Gagal untuk mengambil pesan. Error:  ${error.response.data.message}`,
+            duration: 3000
+          });
+        }
+      );
+    };
+
+    fetchChat();
+  }, []);
+
+  const handleSubmit = () => {
+    const data = {
+      transaksiId: transactionId,
+      isi: input,
+      pengirimId: sender.id,
+      time: Date.now()
+    };
+
+    sendMessage(data);
+    setInput('');
+
+    Api.postChat(transactionId, { isi: input }).then(
+      (res) => {
+        console.log('Message sent');
+      },
+      (error) => {
+        Toast.show({
+          text: error.response.data.message,
+          duration: 3000
+        });
+      }
+    );
+  };
+
   return (
     <Container>
       <Header
         iconName="chevron-back-outline"
-        title="Obrolan"
+        title={listener.nama}
         onPress={() => Actions.pop()}
       />
       <Content>
         <View>
-          {mockData.map((item, index) => (
+          {messages.map((item, index) => (
             <BubbleChat
               key={index}
-              message={item.message}
-              time={item.time}
-              worker={item.item}
+              message={item.isi}
+              time={DateFormatter.getTime(item.time)}
+              listener={item.pengirimId !== sender.id}
             />
           ))}
         </View>
       </Content>
-      {/* <Footer>
-        <Input style={styles.input}/>
-        <Button iconLeft transparent style={styles.button}>
-            <Icon name='paper-plane' style={styles.buttonIcon} />
-          </Button>
-      </Footer> */} 
-      <Footer transparent style={{backgroundColor:'white',opacity:0.9,borderRadius:20,marginHorizontal:10}}>
-        <Input placeholder="Masukkan Pesan" style={styles.input}/>
-        <Button iconLeft transparent style={styles.button}>
-            <Icon name='paper-plane' style={styles.buttonIcon} />
-          </Button>
+      <Footer
+        transparent
+        style={{
+          backgroundColor: 'white',
+          opacity: 0.9,
+          borderRadius: 20,
+          marginHorizontal: 10
+        }}
+      >
+        <Input
+          placeholder="Masukkan Pesan"
+          style={styles.input}
+          value={input}
+          onChangeText={setInput}
+        />
+        <Button
+          iconLeft
+          transparent
+          style={styles.button}
+          onPress={handleSubmit}
+        >
+          <Icon name="paper-plane" style={styles.buttonIcon} />
+        </Button>
       </Footer>
     </Container>
   );

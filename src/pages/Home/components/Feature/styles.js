@@ -21,7 +21,6 @@ module.exports = {
     marginLeft: '30%',
     width: 70,
     height: 70,
-    backgroundColor: '#FFB167',
     borderRadius: 10,
     zIndex: 1,
     elevation: 6

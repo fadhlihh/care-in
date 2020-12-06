@@ -4,7 +4,8 @@ import {
   Switch,
   TouchableOpacity,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
+  PermissionsAndroid
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -14,21 +15,20 @@ import Geolocation from '@react-native-community/geolocation';
 import {
   Container,
   Toast,
-  Left,
   Text,
   Card,
   Right,
-  Icon,
   Button,
   CardItem,
   Content
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import { interval } from 'rxjs';
 import styles from './styles';
 import { StringBuilder, Status, LocationFormatter } from '../../helpers';
 import Api from '../../services';
 import { UserActions } from '../../redux/actions';
-import { OrderStatus } from '../../constant';
+import { OrderStatus, TransactionStatus, ToastMessage } from '../../constant';
 
 const propTypes = {
   user: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -41,16 +41,18 @@ const HomeWorker = (props) => {
   const { user, setUser } = props;
 
   const [state, setState] = useState({
-    isLoaded: false,
     sharingLocation: false,
     activeTransaction: {
       status: OrderStatus.INACTIVE
     }
   });
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const [userLocation, setUserLocation] = useState({});
 
   let mapRef;
+  const userMarkerRef = null;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -79,7 +81,7 @@ const HomeWorker = (props) => {
     const fetchTransaction = async () => {
       return Api.getTransactionWorker().then(
         (res) => {
-          return {
+          setState({
             deposit: {
               income: res.totalPendapatan,
               unpaid: res.totalBelumSetor,
@@ -95,7 +97,7 @@ const HomeWorker = (props) => {
                     status: Status.getStatus(res.transaksiBerjalan.status)
                   }
                 : { ...state.activeTransaction }
-          };
+          });
         },
         (error) => {
           Toast.show({ text: error.message });
@@ -103,55 +105,83 @@ const HomeWorker = (props) => {
       );
     };
 
-    const getUserLocation = (data) => {
-      Geolocation.getCurrentPosition(
-        (position) => {
-          setState(
-            {
-              ...state,
-              ...data,
-              isLoaded: true
+    fetchUser();
+    fetchTransaction();
+    // interval(2000).subscribe(() => {
+    //   console.log('Transaction fetched');
+    // });
+  }, []);
+
+  useEffect(() => {
+    const requestLocationPermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Permission',
+            message: 'MyMapApp needs access to your location'
+          }
+        );
+
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          Geolocation.getCurrentPosition(
+            (newPosition) => {
+              console.log('Getting location...');
+              const position = {
+                latitude: newPosition.coords.latitude,
+                longitude: newPosition.coords.longitude
+              };
+              setUserLocation(position);
+              setIsLoaded(true);
             },
-            setUserLocation({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            })
+            (error) => {
+              Toast.show({ text: error.message });
+              console.log('Error getting location: ', error);
+            }
           );
-        },
-        (error) => Toast.show({ text: error.message }),
-        { enableHighAccuracy: false, timeout: 5000 }
-      );
+          Geolocation.watchPosition(
+            (newPosition) => {
+              console.log('Watching location...');
+              const position = {
+                latitude: newPosition.coords.latitude,
+                longitude: newPosition.coords.longitude
+              };
+              setUserLocation(position);
+              setIsLoaded(true);
+
+              if (userMarkerRef !== null)
+                userMarkerRef.animateMarkerToCoordinate(position, 500);
+            },
+            (error) => {
+              Toast.show({ text: error.message });
+              console.log('Error watching location: ', error);
+            }
+          );
+          console.log('Location permission granted');
+        } else {
+          console.log('Location permission denied');
+        }
+      } catch (err) {
+        console.warn(err);
+      }
     };
 
-    const watchUserLocation = () => {
-      Geolocation.watchPosition((lastPosition) => {
-        setUserLocation({
-          latitude: lastPosition.coords.latitude,
-          longitude: lastPosition.coords.longitude
-        });
-        console.log('location set : ', {
-          latitude: lastPosition.coords.latitude,
-          longitude: lastPosition.coords.longitude
-        });
-      });
-    };
-
-    fetchUser()
-      .then(() => fetchTransaction())
-      .then((data) => getUserLocation(data));
-    watchUserLocation();
+    requestLocationPermission();
   }, []);
 
   const toggleSwitch = () => {
     const body = {
-      ...user,
       berbagiLokasi: !state.sharingLocation,
       lokasi: { ...LocationFormatter.fromMapsToApi(userLocation) }
     };
 
     Api.putWorker(user.id, body).then(
-      (res) => {
-        Toast.show({ text: res.message });
+      () => {
+        Toast.show({
+          text: `Terima pesanan ${
+            !state.sharingLocation ? 'diaktifkan' : 'dimatikan'
+          }`
+        });
         setState({ ...state, sharingLocation: !state.sharingLocation });
       },
       (error) => {
@@ -171,25 +201,30 @@ const HomeWorker = (props) => {
     });
   };
 
-  const handleUpdateTransaction = (response) => {
-    let body;
-    if (response) {
-      body = {
-        status: 'berjalan',
-        berhasil: false
-      };
-    } else {
-      body = {
-        status: 'selesai',
-        berhasil: true
-      };
+  const handleUpdateTransaction = (body) => {
+    let toastMessage;
+    switch (body) {
+      case TransactionStatus.ONPROCCESS:
+        toastMessage = ToastMessage.Transaction.ACCEPT;
+        break;
+      case TransactionStatus.FAILED:
+        toastMessage =
+          state.activeTransaction.status === OrderStatus.PENDING
+            ? ToastMessage.Transaction.DECLINE
+            : ToastMessage.Transaction.CANCEL;
+        break;
+      case TransactionStatus.DONE:
+        toastMessage = ToastMessage.Transaction.DONE;
+        break;
+      default:
+        break;
     }
 
     Api.putTransaction(state.activeTransaction.id, body)
       .then(
-        (res) => {
+        () => {
           Toast.show({
-            text: response ? 'Pesanan diterima' : 'Pesanan ditolak'
+            text: toastMessage
           });
         },
         (error) => {
@@ -200,7 +235,7 @@ const HomeWorker = (props) => {
       )
       .then(
         () => {
-          if (response) {
+          if (body !== TransactionStatus.FAILED) {
             Api.getTransactionWorker().then(
               (res) => {
                 return {
@@ -245,7 +280,7 @@ const HomeWorker = (props) => {
   };
 
   const renderMapView = () => {
-    return state.isLoaded ? (
+    return isLoaded ? (
       <MapView
         ref={(ref) => {
           mapRef = ref;
@@ -257,8 +292,8 @@ const HomeWorker = (props) => {
           longitudeDelta: 0.15
         }}
         onLayout={reCenterMaps}
+        showsUserLocation
       >
-        <Marker coordinate={userLocation} onMapReady title="Lokasi Kamu" />
         {Status.validToGetPatientLocation(state.activeTransaction.status) && (
           <Marker
             coordinate={state.activeTransaction.pasienLokasi}
@@ -277,33 +312,49 @@ const HomeWorker = (props) => {
         return (
           <View style={styles.card}>
             <CardItem style={styles.bundle}>
-                <View>
-                  <View style={styles.subCardOne}>
-                    <Text style={styles.nameSubCardOne}>Antonius</Text>
-                    <Text style={styles.statusSubCardOne}>
-                      Sedang dalam perjalanan
-                    </Text>
-                  </View>
-                  <View style={styles.btnSubCardOne}>
-                    <Button style={styles.btnCancelDetailOne}>
-                      <Text style={styles.btnCancelTextOne}>Batalkan</Text>
-                    </Button>
-                    <Button style={styles.btnSuccessDetailOne}>
-                      <Text style={styles.btnSuccessTextOne}>Selesai</Text>
-                    </Button>
-                  </View>
+              <View>
+                <View style={styles.subCardOne}>
+                  <Text style={styles.nameSubCardOne}>
+                    {state.activeTransaction.pasien.nama}
+                  </Text>
+                  <Text style={styles.statusSubCardOne}>
+                    Sedang dalam perjalanan
+                  </Text>
                 </View>
+                <View style={styles.btnSubCardOne}>
+                  <Button
+                    style={styles.btnCancelDetailOne}
+                    onPress={() =>
+                      handleUpdateTransaction(TransactionStatus.FAILED)}
+                  >
+                    <Text style={styles.btnCancelTextOne}>Batalkan</Text>
+                  </Button>
+                  <Button
+                    style={styles.btnSuccessDetailOne}
+                    onPress={() =>
+                      handleUpdateTransaction(TransactionStatus.DONE)}
+                  >
+                    <Text style={styles.btnSuccessTextOne}>Selesai</Text>
+                  </Button>
+                </View>
+              </View>
               <Right style={styles.chatBundle}>
                 <Button
                   iconLeft
                   style={styles.chatSubCardOne}
                   onPress={() =>
                     Actions.chat({
-                      patientId: state.activeTransaction.pasienId
+                      listener: {
+                        id: state.activeTransaction.pasienId,
+                        ...state.activeTransaction.pasien
+                      },
+                      transactionId: state.activeTransaction.id,
+                      sender: user
                     })}
                 >
-                  <Icon name="paper-plane" style={{ fontSize: 10 }} />
-                  <Text style={styles.chatTextSubCardOne}>Chat</Text>
+                  <Text style={styles.chatTextSubCardOne}>
+                    <Text style={{ color: 'white' }}>Chat</Text>
+                  </Text>
                 </Button>
               </Right>
             </CardItem>
@@ -349,7 +400,7 @@ const HomeWorker = (props) => {
             <View style={styles.cardBundle}>
               <View style={{ marginLeft: '0%' }}>
                 <Text style={styles.nameSubCardOne}>
-                  {state.activeTransaction.pasienId}
+                  {state.activeTransaction.pasien.nama}
                 </Text>
                 <Text style={{ color: 'rgba(6, 44, 60, 0.9)', fontSize: 12 }}>
                   {`${state.activeTransaction.meter} m`}
@@ -357,16 +408,22 @@ const HomeWorker = (props) => {
                 <View style={styles.option}>
                   <Button
                     style={styles.btnCancelDetailThree}
-                    onPress={() => handleUpdateTransaction(false)}
+                    onPress={() =>
+                      handleUpdateTransaction(TransactionStatus.FAILED)}
                   >
-                    <Text style={styles.btnCancelTextThree}>Tolak</Text>
+                    <Text style={styles.btnCancelTextThree}>
+                      <Text>Tolak</Text>
+                    </Text>
                   </Button>
                   <Button
                     success
                     style={styles.btnSuccessDetailThree}
-                    onPress={() => handleUpdateTransaction(true)}
+                    onPress={() =>
+                      handleUpdateTransaction(TransactionStatus.ONPROCCESS)}
                   >
-                    <Text style={styles.btnSuccessTextThree}>Terima</Text>
+                    <Text style={styles.btnSuccessTextThree}>
+                      <Text style={{ color: 'white' }}>Terima</Text>
+                    </Text>
                   </Button>
                 </View>
               </View>
@@ -381,7 +438,7 @@ const HomeWorker = (props) => {
 
   return (
     <Container>
-      <Content>
+      <Content showsVerticalScrollIndicator={false}>
         <View style={styles.heading}>
           <Text style={{ fontWeight: 'bold', fontSize: 24 }}>Care.in</Text>
           <TouchableOpacity onPress={() => Actions.profile()}>
@@ -395,13 +452,17 @@ const HomeWorker = (props) => {
           <View>
             <Text style={styles.infoMoneyHeader}>Total Pendapatan</Text>
             <Text style={styles.infoMoneyTotal}>
-              {state.deposit ? state.deposit.income : '0'}
+              {state.deposit
+                ? StringBuilder.formatCurrency(state.deposit.income)
+                : '0'}
             </Text>
           </View>
           <View>
             <Text style={styles.infoMoneyHeader}>Uang yang harus disetor</Text>
             <Text style={styles.infoMoneyTotal}>
-              {state.deposit ? state.deposit.unpaid : '0'}
+              {state.deposit
+                ? StringBuilder.formatCurrency(state.deposit.unpaid)
+                : '0'}
             </Text>
           </View>
         </View>

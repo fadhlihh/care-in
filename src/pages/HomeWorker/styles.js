@@ -110,13 +110,17 @@ module.exports = {
   btnCancelDetailOne: {
     backgroundColor: '#EB5757',
     opacity: 0.2,
-    width: 85,
+    width: 72,
     height: 32,
     borderRadius: 8
   },
   btnCancelTextOne: {
     fontSize: 10,
-    color: 'red'
+    color: 'red',
+    textAlign:'center',
+    flex:1,
+    paddingLeft:'-2%',
+    paddingRight:'-2%',
   },
   btnSuccessDetailOne: {
     backgroundColor: '#27AE60',
@@ -130,6 +134,9 @@ module.exports = {
     fontSize: 10,
     color: 'green',
     flex:1,
+    textAlign:'center',
+    paddingLeft:'-2%',
+    paddingRight:'-2%',
   },
   btnSuccessDetailThree: {
     width: 72,
@@ -153,10 +160,17 @@ module.exports = {
   btnCancelTextThree: {
     fontSize: 10,
     color: 'red',
+    textAlign:'center',
+    flex:1,
+    paddingLeft:'-2%',
+    paddingRight:'-2%',
   },
   btnSuccessTextThree: {
     fontSize: 10,
-    color: 'white'
+    textAlign:'center',
+    flex:1,
+    paddingLeft:'-2%',
+    paddingRight:'-2%',
   },
   cardContainer: {
     marginTop: '5%',
@@ -182,7 +196,10 @@ module.exports = {
   chatTextSubCardOne: {
     fontSize: 10,
     color: 'white',
-    textAlign: 'center'
+    flex:1,
+    textAlign:'center',
+    paddingLeft:'-2%',
+    paddingRight:'-2%',
   },
   card:{
     overflow: 'hidden', 
@@ -288,6 +305,5 @@ module.exports = {
   chatBundle: {
     alignSelf: 'center',
     marginRight: '-13%',
-    marginTop:5
   },
 };

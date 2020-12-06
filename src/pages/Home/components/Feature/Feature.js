@@ -15,6 +15,13 @@ const defaultProps = {
   color: '#FFFFFF'
 };
 
+const getColor = (color) => {
+  switch(color){
+    case 'blue' : return ('#497CFB')
+    case 'red'  : return ('#F47F72')
+    case 'orange'  : return ('#FFB167')
+  }
+};
 const Feature = (props) => {
   const { title, imageSource, onPress, color } = props;
 
@@ -28,7 +35,16 @@ const Feature = (props) => {
           {title}
         </Title>
       </View>
-      <View style={styles.stack_two}>
+      <View style={{
+        backgroundColor:getColor(color),
+        position: 'absolute',
+        marginLeft: '30%',
+        width: 70,
+        height: 70,
+        borderRadius: 10,
+        zIndex: 1,
+        elevation: 6
+        }}>
         <Thumbnail source={imageSource} style={styles.img} />
       </View>
     </TouchableOpacity>

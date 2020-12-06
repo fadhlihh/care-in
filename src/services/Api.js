@@ -15,6 +15,8 @@ const getTransactionWorker = async (params) =>
   get('transaksi?user=nakes', await config.withToken(params));
 const getMedicalHitory = async (id, params) =>
   get(`riwayat-kesehatan/${id}`, await config.withToken(params));
+const getChat = async (id) =>
+  get(`transaksi/${id}/chat`, await config.withToken());
 
 // Post
 const postRegister = (data) => post('pasien', data);
@@ -26,6 +28,8 @@ const postOrder = async (id, data) =>
   post(`transaksi/${id}`, data, await config.withToken());
 const postMedicalHistory = async (id, data) =>
   post(`riwayat-kesehatan/${id}`, data, await config.withToken());
+const postChat = async (id, data) =>
+  post(`transaksi/${id}/chat`, data, await config.withToken());
 
 // Put
 const putUser = async (id, data) =>
@@ -48,12 +52,14 @@ const Api = {
   getTransaction,
   getTransactionWorker,
   getMedicalHitory,
+  getChat,
   postRegister,
   postCheckRegister,
   postGenerateToken,
   postGenerateTokenWorker,
   postMedicalHistory,
   postOrder,
+  postChat,
   putUser,
   putTransaction,
   putMedicalHistory,

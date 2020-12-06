@@ -14,7 +14,14 @@ const propTypes = {
 const defaultProps = {
   name: 'User'
 };
-
+const getColor = (warna) => {
+  switch(warna){
+    case 'blue' : return ('#497CFB');
+    case 'red' : return ('red');
+    case 'orange' : return ('orange');
+    case 'green' : return ('green');
+  }
+}
 const StyledHeader = (props) => {
   const { title,item,icon,warna, ...rest } = props;
 
@@ -22,7 +29,7 @@ const StyledHeader = (props) => {
     <ListItem noBorder avatar >
       <View style={styles.box}>
         <View style={styles.boxWrapper}>
-        <Icon name={icon} style={styles.stylesIcon}/>
+        <Icon name={icon} style={{color:getColor(warna),fontSize:25,marginVertical:5,marginHorizontal:5}}/>
         </View>
       </View>
       <Body style={styles.body}>

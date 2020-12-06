@@ -39,13 +39,24 @@ module.exports = {
     paddingBottom: 5,
     paddingRight: 5,
     borderRadius: 24,
-    marginTop:15
+    marginTop: 15
   },
   bundle: {
     backgroundColor: '#fff',
     shadowColor: '#000',
     width: 'auto',
-    height: 106,
+    height: 155,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 5,
+    borderRadius: 24
+  },
+  bundleWorker: {
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    width: 'auto',
+    height: 120,
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 1,
@@ -69,14 +80,20 @@ module.exports = {
     color: 'rgba(6, 44, 60, 0.9)',
     fontSize: 14,
     paddingLeft: '-5%',
-    marginTop:6
+    marginTop: 6
   },
   doneSubcardCost: {
     color: 'rgba(6, 44, 60, 0.9)',
     fontSize: 14,
     paddingLeft: '-5%',
-    marginTop:7,
-    fontWeight:'bold'
+    marginTop: 7,
+    fontWeight: 'bold'
+  },
+  detailTranscaction: {
+    color: 'rgba(6, 44, 60, 0.9)',
+    fontSize: 14,
+    paddingLeft: '-5%',
+    marginTop: 0
   },
   done: {
     color: '#27AE60',

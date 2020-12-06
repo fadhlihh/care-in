@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Container, List, Card, Content, Toast } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { LocalStorage, StringBuilder } from '../../helpers';
+import { LocalStorage, StringBuilder, DateFormatter } from '../../helpers';
 import Api from '../../services';
 import styles from './styles';
 import { Header, ProfileItem, Riwayat } from './components';
@@ -59,7 +59,7 @@ const Profile = (props) => {
 
   return (
     <Container>
-      <Content>
+      <Content showsVerticalScrollIndicator={false}>
         <Header
           name={user.nama}
           username={user.username}
@@ -79,7 +79,7 @@ const Profile = (props) => {
                 title="Nomor Telepon"
                 item={user.noTelp}
                 icon="call-outline"
-                color="red"
+                warna="red"
               />
 
               {userType === UserType.PATIENT && (
@@ -88,13 +88,13 @@ const Profile = (props) => {
                     title="Berat Badan"
                     item={`${user.beratBadan} kg`}
                     icon="man-outline"
-                    color="yellow"
+                    warna="orange"
                   />
                   <ProfileItem
                     title="Tinggi Badan"
                     item={`${user.tinggiBadan} cm`}
                     icon="resize-outline"
-                    color="green"
+                    warna="green"
                   />
                 </View>
               )}
@@ -105,13 +105,13 @@ const Profile = (props) => {
                     title="Profesi"
                     item={`${StringBuilder.capitalizeLetter(user.jenis)}`}
                     icon="medkit-outline"
-                    color="green"
+                    warna="orange"
                   />
                   <ProfileItem
                     title="Harga"
-                    item={`Rp. ${user.harga}`}
+                    item={`Rp. ${StringBuilder.formatCurrency(user.harga)}`}
                     icon="cash-outline"
-                    color="green"
+                    warna="green"
                   />
                 </View>
               )}
@@ -119,12 +119,8 @@ const Profile = (props) => {
 
             {userType === UserType.PATIENT && (
               <View>
-                <View
-                  style={styles.bundleRiwayat}
-                >
-                  <Text style={styles.textRiwayat}>
-                    Riwayat Kesehatan
-                  </Text>
+                <View style={styles.bundleRiwayat}>
+                  <Text style={styles.textRiwayat}>Riwayat Kesehatan</Text>
                   <TouchableOpacity onPress={() => Actions.medicalHistory()}>
                     <Text style={styles.textLihat}>Lihat Semua</Text>
                   </TouchableOpacity>
@@ -135,7 +131,7 @@ const Profile = (props) => {
                     <Riwayat
                       index={item.id}
                       penyakit={item.namaPenyakit}
-                      tanggal={item.tanggal}
+                      tanggal={DateFormatter.getLegibleDate(item.tanggal)}
                     />
                   ))}
                 </Card>

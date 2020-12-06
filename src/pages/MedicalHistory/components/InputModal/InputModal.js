@@ -69,15 +69,16 @@ const StyledBottomSheet = (props) => {
               valueDate !== 'Invalid date' ? valueDate : 'Pilih tanggal'
             }
           />
+          <View style={styles.btnModal}>
+            <Button transparent style={styles.btnKembali} onPress={onPressCancelButton}>
+              <Text style={styles.btnModalKembali}><Text style={styles.kembali}>Kembali</Text></Text>
+            </Button>
+            <Button style={styles.btnModalSimpan} onPress={onPressSaveButton}>
+              <Text style={styles.btntextModalSimpan}><Text style={styles.textSimpan}>Simpan</Text></Text>
+            </Button>
+          </View>
         </View>
-        <View style={styles.btnModal}>
-          <Button transparent onPress={onPressCancelButton}>
-            <Text style={styles.btnModalKembali}>Kembali</Text>
-          </Button>
-          <Button style={styles.btnModalSimpan} onPress={onPressSaveButton}>
-            <Text style={styles.btntextModalSimpan}>Simpan</Text>
-          </Button>
-        </View>
+        
       </View>
     </BottomSheet>
   );

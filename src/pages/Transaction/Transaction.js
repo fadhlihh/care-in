@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { Container, Content, Toast, Text } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Header } from '../../components';
@@ -7,6 +7,7 @@ import { CardTransaction } from './components';
 import Api from '../../services';
 import { LocalStorage, StringBuilder, DateFormatter } from '../../helpers';
 import { UserType } from '../../constant';
+import styles from './styles';
 
 const propTypes = {};
 
@@ -91,23 +92,11 @@ const Transaction = () => {
     };
 
     setUserType().then((userType) => fetchTransaction(userType));
+    console.log(state);
   }, []);
 
   const renderTransactionCard = () => {
     const cardList = [];
-
-    if (state.transactionStatus === 'active') {
-      cardList.push(
-        <CardTransaction
-          name={state.activeTransaction.worker.nama}
-          photoSource={{
-            uri: StringBuilder.addBaseURL(state.activeTransaction.worker.foto)
-          }}
-          status={state.activeTransaction.sakit}
-          onPress={() => Actions.chat()}
-        />
-      );
-    }
 
     state.transactionHistory.forEach((item) =>
       cardList.push(
@@ -121,10 +110,15 @@ const Transaction = () => {
           photoSource={{
             uri: StringBuilder.addBaseURL(item.nakes.foto)
           }}
-          status={item.sakit}
-          cost={item.totalBiaya}
+          status={item.berhasil}
+          cost={item.totalBiaya + item.biayaAdmin}
+          costDetail={{
+            biayaAdmin: item.biayaAdmin,
+            biayaJasa: item.biayaJasa,
+            biayaTranspor: item.biayaTranspor
+          }}
           date={DateFormatter.getLegibleDate(item.waktuDibuat)}
-          worker={state.userType === UserType.PATIENT}
+          worker={state.userType === UserType.WORKER}
         />
       )
     );
@@ -133,8 +127,20 @@ const Transaction = () => {
   };
 
   const renderContent = () => {
-    if (state.transactionStatus === 'no-transaction') {
-      return <Text>Kamu belum pernah memesan tenaga kesehatan</Text>;
+    if (
+      state.transactionStatus === 'no-transaction' ||
+      (state.transactionStatus === 'active' &&
+        state.transactionHistory.length === 0)
+    ) {
+      return (
+        <View style={styles.nothingDefault}>
+          <View>
+            <Text style={styles.textNothingDefault}>
+              {`Kamu belum pernah \n memesan tenaga kesehatan`}
+            </Text>
+          </View>
+        </View>
+      );
     }
     return renderTransactionCard();
   };
@@ -143,7 +149,7 @@ const Transaction = () => {
     <Container>
       <Header
         iconName="chevron-back-outline"
-        title="Riwayat"
+        title="Riwayat Transaksi"
         onPress={() => Actions.pop()}
       />
       <Content>

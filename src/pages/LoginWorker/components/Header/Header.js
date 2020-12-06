@@ -12,6 +12,8 @@ import {
   Subtitle,
   Thumbnail
 } from 'native-base';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Actions } from 'react-native-router-flux';
 import styles from './styles';
 
 const propTypes = {

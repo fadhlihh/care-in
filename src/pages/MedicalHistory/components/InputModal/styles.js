@@ -20,12 +20,13 @@ module.exports = {
   },
 
   formInput: {
-    marginBottom: 16
+    marginTop:12,
   },
 
   btnModal: {
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    marginTop: 16,
   },
 
   btnSuccessTextThree: {
@@ -40,19 +41,25 @@ module.exports = {
     backgroundColor: '#EB5757',
     opacity: 0.2
   },
-  btnModalKembali: {
+  btnKembali:{
+    marginRight:16
+  },
+  kembali: {
     fontSize: 16,
     color: 'rgba(6, 44, 60, 0.4)'
   },
   btnModalSimpan: {
     backgroundColor: '#497CFB',
     borderRadius: 8,
-    width: 94,
+    width: 102,
     height: 46
   },
   btntextModalSimpan: {
-    color: 'rgba(255, 255, 255, 0.9)',
     fontSize: 16,
-    textAlign: 'center'
+    textAlign: 'center',
+    flex:1
+  },
+  textSimpan:{
+    color: 'rgba(255, 255, 255, 0.9)',
   }
 };

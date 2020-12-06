@@ -12,12 +12,16 @@
       android:icon="@mipmap/icare_icon"
       android:roundIcon="@mipmap/icare_icon"
       android:allowBackup="false"
-      android:theme="@style/AppTheme">
+      android:theme="@style/AppTheme"
+      android:usesCleartextTraffic="true">
+      <meta-data 
+        android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@mipmap/icare_icon" />
       <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyDKbwCuhy9fi8fELARXzZ3FRQ3RkKPbLUc"/>
       <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_name"
-        android:value="CAREIN PUSH NOTIFICATION CHANNEL"/>
+        android:value="CareIn Notification"/>
       <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_description"
         android:value="NOTIFICATION PUSH FOR CARE IN APPS"/>
 

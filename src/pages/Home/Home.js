@@ -14,22 +14,22 @@ import {
   Button
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { interval } from 'rxjs';
 import { Header, Feature } from './components';
 import styles from './styles';
 import Api from '../../services';
 import { CloudMessaging } from '../../services/Firebase';
 import { UserActions } from '../../redux/actions';
 import { StringBuilder, DateFormatter, Cost } from '../../helpers';
-import { OrderStatus } from '../../constant';
+import { OrderStatus, NotificationType } from '../../constant';
 
 const propTypes = {
   user: PropTypes.objectOf(PropTypes.any).isRequired,
-  setUser: PropTypes.func.isRequired
+  setUser: PropTypes.func.isRequired,
+  load: PropTypes.bool.isRequired
 };
 
 const Home = (props) => {
-  const { user, setUser } = props;
+  const { user, setUser, load } = props;
 
   const [state, setState] = useState({
     activeTransaction: {},
@@ -44,27 +44,34 @@ const Home = (props) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      Api.getCheckAuth().then(
-        (res) => {
-          Api.getUser(res.user.id).then(
-            (data) => {
-              setUser(data.pasien);
-            },
-            (e) => {
-              Toast.show({ text: e.response.data.message });
-            }
-          );
-        },
-        () => {
-          Toast.show({ text: `Tidak terkoneksi dengan internet` });
-        }
-      );
+      Api.getCheckAuth()
+        .then(
+          (res) => {
+            return res.user.id;
+          },
+          () => {
+            Toast.show({ text: `Tidak terkoneksi dengan internet` });
+          }
+        )
+        .then((userId) => {
+          return Api.getUser(userId);
+        })
+        .then(
+          (data) => {
+            setUser(data.pasien);
+            return data.pasien.id;
+          },
+          (e) => {
+            Toast.show({ text: e.response.data.message });
+          }
+        )
+        .then(
+          (userId) => CloudMessaging.sendTokenToServer(userId),
+          (error) => Toast.show({ text: error.message })
+        );
     };
 
-    fetchUser().then(
-      () => CloudMessaging.sendTokenToServer(user.id),
-      (error) => Toast.show({ text: error.message })
-    );
+    fetchUser();
   }, []);
 
   useEffect(() => {
@@ -105,8 +112,8 @@ const Home = (props) => {
       );
     };
 
-    interval(500).subscribe(() => fetchTransaction());
-  }, [reload]);
+    fetchTransaction().then(() => console.log('Fetching transaction...'));
+  }, [reload, load]);
 
   const handleCancelTransaction = () => {
     const body = {
@@ -119,6 +126,16 @@ const Home = (props) => {
         Toast.show({
           text: 'Pesanan dibatalkan'
         });
+        const data = {
+          data: {
+            type: NotificationType.ORDER_CANCELED
+          },
+          userId: state.activeTransaction.nakesId,
+          title: 'Pesanan anda dibatalkan',
+          body: `${user.nama} telah membatalkan pemesanan`
+        };
+        CloudMessaging.sendNotification(data);
+
         setReload(!reload);
       },
       (error) => {
@@ -237,17 +254,19 @@ const Home = (props) => {
                   </Text>
                   <Text style={styles.doneSubcard}>
                     <Text style={styles.doneSubcardTwo}>
-                      {`Rp. ${Cost.getTotal(state.lastTransaction)}`}
+                      {`Rp. ${StringBuilder.formatCurrency(
+                        Cost.getTotal(state.lastTransaction)
+                      )}`}
                     </Text>
                     {` • `}
                     <Text
                       style={
-                        state.lastTransaction.sakit
+                        state.lastTransaction.berhasil
                           ? styles.done
                           : styles.failed
                       }
                     >
-                      {state.lastTransaction.sakit ? 'Berhasil' : 'Gagal'}
+                      {state.lastTransaction.berhasil ? 'Berhasil' : 'Gagal'}
                     </Text>
                   </Text>
                 </View>
@@ -281,7 +300,7 @@ const Home = (props) => {
         <View style={styles.root}>
           <View style={styles.subtitle}>
             <Text style={styles.textSubHeading}>Transaksi</Text>
-            <TouchableOpacity onPress={() => Actions.transaction()}>
+            <TouchableOpacity onPress={Actions.transaction}>
               <Text style={styles.textSubHeadingAll}>Lihat Semua</Text>
             </TouchableOpacity>
           </View>
@@ -294,19 +313,19 @@ const Home = (props) => {
               <Feature
                 title="Dokter"
                 color="blue"
-                imageSource={require('../../assets/dokter.png')}
+                imageSource={require('../../assets/images/dokter-menu.png')}
                 onPress={() => Actions.selectWorker({ workerType: 'dokter' })}
               />
               <Feature
                 title="Psikolog"
                 color="red"
-                imageSource={require('../../assets/psikolog.png')}
+                imageSource={require('../../assets/images/psikolog-menu.png')}
                 onPress={() => Actions.selectWorker({ workerType: 'psikolog' })}
               />
               <Feature
                 title="Perawat"
                 color="orange"
-                imageSource={require('../../assets/perawat.png')}
+                imageSource={require('../../assets/images/perawat-menu.png')}
                 onPress={() => Actions.selectWorker({ workerType: 'perawat' })}
               />
             </View>
@@ -321,7 +340,8 @@ Home.propTypes = propTypes;
 
 const mapStateToProps = (state) => {
   return {
-    user: state.userReducer.user
+    user: state.userReducer.user,
+    load: state.loadReducer.load
   };
 };
 

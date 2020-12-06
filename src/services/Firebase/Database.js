@@ -7,8 +7,12 @@ const addToken = (user) => {
     .then(() => console.log(`Token successfully set : ${user.token}`));
 };
 
+const getToken = (userId) => {
+  return database().ref(`/users/${userId}`).once('value');
+};
 const Database = {
-  addToken
+  addToken,
+  getToken
 };
 
 export default Database;

@@ -14,7 +14,8 @@ const propTypes = {
 
 const defaultProps = {
   pictureSource: {
-    uri: 'https://dummyimage.com/400x400/c4c4c4/ffffff&text=Profile+Picture'
+    uri:
+      'https://www.cornwallbusinessawards.co.uk/wp-content/uploads/2017/11/dummy450x450.jpg'
   }
 };
 
@@ -36,7 +37,7 @@ const StyledHeader = (props) => {
     >
       <ImageBackground
         style={styles.background}
-        source={require('../../../../assets/WavyBackground.png')}
+        source={require('../../../../assets/images/WavyBackground.png')}
       />
       <View style={styles.textBundle}>
         <View style={styles.imageBundle}>

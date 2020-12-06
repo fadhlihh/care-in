@@ -103,7 +103,7 @@ const SelectWorker = (props) => {
     <Container>
       <Header
         iconName="chevron-back-outline"
-        title="Pilih Dokter"
+        title={`Pilih ${StringBuilder.capitalizeLetter(workerType)}`}
         onPress={() => Actions.pop()}
       />
       <Content style={styles.cardContainer}>

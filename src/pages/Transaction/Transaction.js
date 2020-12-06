@@ -72,6 +72,11 @@ const Transaction = () => {
                 isLoaded: true,
                 userType
               });
+            } else {
+              setState({
+                ...state,
+                userType
+              });
             }
           },
           (error) => {

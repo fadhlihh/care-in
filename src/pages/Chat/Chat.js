@@ -15,7 +15,9 @@ import Api, { useChat } from '../../services';
 import { Header } from '../../components';
 import { BubbleChat } from './components';
 import styles from './styles';
-import { DateFormatter, LocalStorage } from '../../helpers';
+import { DateFormatter, StringBuilder } from '../../helpers';
+import { CloudMessaging } from '../../services/Firebase';
+import { NotificationType } from '../../constant';
 
 const propTypes = {
   listener: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -69,8 +71,16 @@ const Chat = (props) => {
     setInput('');
 
     Api.postChat(transactionId, { isi: input }).then(
-      (res) => {
-        console.log('Message sent');
+      () => {
+        const notificationData = {
+          data: {
+            type: NotificationType.CHAT
+          },
+          userId: listener.id,
+          title: sender.nama,
+          body: input
+        };
+        CloudMessaging.sendNotification(notificationData);
       },
       (error) => {
         Toast.show({
@@ -96,6 +106,11 @@ const Chat = (props) => {
               message={item.isi}
               time={DateFormatter.getTime(item.time)}
               listener={item.pengirimId !== sender.id}
+              listenerPicture={{
+                uri: sender.foto
+                  ? 'https://www.cornwallbusinessawards.co.uk/wp-content/uploads/2017/11/dummy450x450.jpg'
+                  : StringBuilder.addBaseURL(sender.foto)
+              }}
             />
           ))}
         </View>

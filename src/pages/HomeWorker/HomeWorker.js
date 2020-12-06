@@ -23,30 +23,37 @@ import {
   Content
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { interval } from 'rxjs';
 import styles from './styles';
 import { StringBuilder, Status, LocationFormatter } from '../../helpers';
 import Api from '../../services';
-import { UserActions } from '../../redux/actions';
-import { OrderStatus, TransactionStatus, ToastMessage } from '../../constant';
+import { CloudMessaging } from '../../services/Firebase';
+import { UserActions, LoadActions } from '../../redux/actions';
+import {
+  OrderStatus,
+  TransactionStatus,
+  ToastMessage,
+  NotificationType
+} from '../../constant';
 
 const propTypes = {
   user: PropTypes.objectOf(PropTypes.any).isRequired,
-  setUser: PropTypes.func.isRequired
+  setUser: PropTypes.func.isRequired,
+  load: PropTypes.bool.isRequired,
+  setLoad: PropTypes.func.isRequired
 };
 
 const defaultProps = {};
 
 const HomeWorker = (props) => {
-  const { user, setUser } = props;
+  const { user, setUser, load, setLoad } = props;
 
   const [state, setState] = useState({
-    sharingLocation: false,
     activeTransaction: {
       status: OrderStatus.INACTIVE
     }
   });
 
+  const [sharingLocation, setSharingLocation] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const [userLocation, setUserLocation] = useState({});
@@ -56,32 +63,43 @@ const HomeWorker = (props) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      return Api.getCheckAuth().then(
-        (res) => {
-          const params = {
+      Api.getCheckAuth()
+        .then(
+          (res) => res.user.id,
+          () => {
+            Toast.show({ text: `Tidak terkoneksi dengan internet` });
+          }
+        )
+        .then((workerId) =>
+          Api.getWorker({
             params: {
-              id: res.user.id
+              id: workerId
             }
-          };
-          Api.getWorker(params).then(
-            (data) => {
-              setUser(data.nakes[0]);
-            },
-            (e) => {
-              Toast.show({ text: e.message });
-            }
-          );
-        },
-        () => {
-          Toast.show({ text: `Tidak terkoneksi dengan internet` });
-        }
-      );
+          })
+        )
+        .then(
+          (data) => {
+            setUser(data.nakes[0]);
+            return data.nakes[0].id;
+          },
+          (e) => {
+            Toast.show({ text: e.message });
+          }
+        )
+        .then((userId) => {
+          CloudMessaging.sendTokenToServer(userId);
+        });
     };
 
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
     const fetchTransaction = async () => {
       return Api.getTransactionWorker().then(
         (res) => {
           setState({
+            ...state,
             deposit: {
               income: res.totalPendapatan,
               unpaid: res.totalBelumSetor,
@@ -96,7 +114,7 @@ const HomeWorker = (props) => {
                     ),
                     status: Status.getStatus(res.transaksiBerjalan.status)
                   }
-                : { ...state.activeTransaction }
+                : { ...state.activeTransaction, status: OrderStatus.INACTIVE }
           });
         },
         (error) => {
@@ -105,12 +123,8 @@ const HomeWorker = (props) => {
       );
     };
 
-    fetchUser();
-    fetchTransaction();
-    // interval(2000).subscribe(() => {
-    //   console.log('Transaction fetched');
-    // });
-  }, []);
+    fetchTransaction().then(() => console.log('Fetching transaction...'));
+  }, [load]);
 
   useEffect(() => {
     const requestLocationPermission = async () => {
@@ -167,11 +181,11 @@ const HomeWorker = (props) => {
     };
 
     requestLocationPermission();
-  }, []);
+  }, [load]);
 
   const toggleSwitch = () => {
     const body = {
-      berbagiLokasi: !state.sharingLocation,
+      berbagiLokasi: !sharingLocation,
       lokasi: { ...LocationFormatter.fromMapsToApi(userLocation) }
     };
 
@@ -179,10 +193,10 @@ const HomeWorker = (props) => {
       () => {
         Toast.show({
           text: `Terima pesanan ${
-            !state.sharingLocation ? 'diaktifkan' : 'dimatikan'
+            !sharingLocation ? 'diaktifkan' : 'dimatikan'
           }`
         });
-        setState({ ...state, sharingLocation: !state.sharingLocation });
+        setSharingLocation(!sharingLocation);
       },
       (error) => {
         Toast.show({ text: error.response.data.message });
@@ -203,80 +217,64 @@ const HomeWorker = (props) => {
 
   const handleUpdateTransaction = (body) => {
     let toastMessage;
+    let data = {};
     switch (body) {
       case TransactionStatus.ONPROCCESS:
         toastMessage = ToastMessage.Transaction.ACCEPT;
+        data = {
+          data: {
+            type: NotificationType.ORDER_ACCEPTED
+          },
+          userId: state.activeTransaction.pasienId,
+          title: 'Pesanan anda telah diterima',
+          body: `${user.nama} akan segera datang`
+        };
         break;
       case TransactionStatus.FAILED:
         toastMessage =
           state.activeTransaction.status === OrderStatus.PENDING
             ? ToastMessage.Transaction.DECLINE
             : ToastMessage.Transaction.CANCEL;
+        data = {
+          data: {
+            type: NotificationType.ORDER_DECLINED
+          },
+          userId: state.activeTransaction.pasienId,
+          title: 'Pesanan anda ditolak',
+          body: `Buka aplikasi untuk memesan lagi`
+        };
         break;
       case TransactionStatus.DONE:
         toastMessage = ToastMessage.Transaction.DONE;
+        data = {
+          data: {
+            type: NotificationType.ORDER_DONE
+          },
+          userId: state.activeTransaction.pasienId,
+          title: 'Pesanan sudah selesai',
+          body: `Terimakasih sudah memesan`
+        };
         break;
       default:
         break;
     }
 
-    Api.putTransaction(state.activeTransaction.id, body)
-      .then(
-        () => {
-          Toast.show({
-            text: toastMessage
-          });
-        },
-        (error) => {
-          Toast.show({
-            text: `Gagal untuk mengubah pesanan ${error.response.data.message}`
-          });
-        }
-      )
-      .then(
-        () => {
-          if (body !== TransactionStatus.FAILED) {
-            Api.getTransactionWorker().then(
-              (res) => {
-                return {
-                  deposit: {
-                    income: res.totalPendapatan,
-                    unpaid: res.totalBelumSetor,
-                    paid: res.totalTelahSetor
-                  },
-                  activeTransaction:
-                    res.transaksiBerjalan !== undefined
-                      ? {
-                          ...res.transaksiBerjalan,
-                          pasienLokasi: LocationFormatter.fromApiToGmaps(
-                            res.transaksiBerjalan.pasienLokasi
-                          ),
-                          status: Status.getStatus(res.transaksiBerjalan.status)
-                        }
-                      : { ...state.activeTransaction }
-                };
-              },
-              (error) => {
-                Toast.show({
-                  text: `Gagal untuk mengubah pesanan ${error.response.data.message}`
-                });
-              }
-            );
-          } else {
-            setState({
-              ...state,
-              activeTransaction: {
-                status: OrderStatus.INACTIVE
-              }
-            });
-          }
-        },
-        (error) => {
-          Toast.show({
-            text: `Gagal untuk mengubah pesanan ${error.response.data.message}`
-          });
-        }
-      );
+    Api.putTransaction(state.activeTransaction.id, body).then(
+      () => {
+        Toast.show({
+          text: toastMessage
+        });
+        CloudMessaging.sendNotification(data).catch((err) =>
+          Toast.show({ text: err.message })
+        );
+        setLoad(load);
+      },
+      (error) => {
+        Toast.show({
+          text: `Gagal untuk mengubah pesanan ${error.response.data.message}`
+        });
+      }
+    );
   };
 
   const renderMapView = () => {
@@ -363,13 +361,11 @@ const HomeWorker = (props) => {
       case OrderStatus.INACTIVE:
         return (
           <Card
-            style={
-              state.sharingLocation ? styles.noInfoCard : styles.noInfoCardOFF
-            }
+            style={sharingLocation ? styles.noInfoCard : styles.noInfoCardOFF}
           >
             <View style={styles.noInfoCardBundle}>
               <Text style={styles.noInfoTextCard}>
-                {state.sharingLocation
+                {sharingLocation
                   ? 'Tidak ada pesan yang masuk'
                   : 'Kamu tidak akan menerima pesanan'}
               </Text>
@@ -381,10 +377,10 @@ const HomeWorker = (props) => {
                       false: 'rgba(255, 255, 255, 0.5)',
                       true: 'rgba(255, 255, 255, 0.5)'
                     }}
-                    thumbColor={state.sharingLocation ? '#f4f3f4' : '#f4f3f4'}
+                    thumbColor={sharingLocation ? '#f4f3f4' : '#f4f3f4'}
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitch}
-                    value={state.sharingLocation}
+                    value={sharingLocation}
                   />
                 </View>
                 <View>
@@ -488,12 +484,13 @@ HomeWorker.defaultProps = defaultProps;
 
 const mapStateToProps = (state) => {
   return {
-    user: state.userReducer.user
+    user: state.userReducer.user,
+    load: state.loadReducer.load
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(UserActions, dispatch);
+  return bindActionCreators({ ...UserActions, ...LoadActions }, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeWorker);

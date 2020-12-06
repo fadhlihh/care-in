@@ -30,6 +30,8 @@ const postMedicalHistory = async (id, data) =>
   post(`riwayat-kesehatan/${id}`, data, await config.withToken());
 const postChat = async (id, data) =>
   post(`transaksi/${id}/chat`, data, await config.withToken());
+const postNotification = async (data) =>
+  post(`notifikasi/`, data, await config.withToken());
 
 // Put
 const putUser = async (id, data) =>
@@ -60,6 +62,7 @@ const Api = {
   postMedicalHistory,
   postOrder,
   postChat,
+  postNotification,
   putUser,
   putTransaction,
   putMedicalHistory,

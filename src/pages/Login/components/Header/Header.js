@@ -35,17 +35,19 @@ const StyledHeader = (props) => {
     >
       <ImageBackground
         style={styles.background}
-        source={require('../../../../assets/WavyBackground.png')}
+        source={require('../../../../assets/images/WavyBackground.png')}
       />
       <View style={styles.textBundle}>
         <Image
           style={{ width: 150, height: 150, borderRadius: 75 }}
           large
-          source={require('../../../../assets/marcell-white.jpg')}
+          source={require('../../../../assets/images/carein-motor.png')}
         />
         <Text style={styles.text}>Care.In</Text>
       </View>
-      <View style={{ position: 'absolute', alignSelf: 'flex-end',marginTop:5 }}>
+      <View
+        style={{ position: 'absolute', alignSelf: 'flex-end', marginTop: 5 }}
+      >
         <Button transparent onPress={() => Actions.loginWorker()}>
           <Icon
             name="medkit-outline"

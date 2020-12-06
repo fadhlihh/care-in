@@ -1,5 +1,6 @@
 import messaging from '@react-native-firebase/messaging';
 import Database from './Database';
+import Api from '../Api';
 
 const setToken = (userId) => {
   const promise = new Promise((resolve, reject) => {
@@ -38,8 +39,32 @@ const sendTokenToServer = (userId) => {
   return promise;
 };
 
+const sendNotification = (notificationData) => {
+  const promise = new Promise((resolve, reject) => {
+    Database.getToken(notificationData.userId).then((token) => {
+      const payload = {
+        token,
+        data: notificationData.data,
+        title: notificationData.title,
+        body: notificationData.body
+      };
+      Api.postNotification(payload).then(
+        (res) => {
+          resolve(res);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+};
+
 const CloudMessaging = {
-  sendTokenToServer
+  sendTokenToServer,
+  sendNotification
 };
 
 export default CloudMessaging;

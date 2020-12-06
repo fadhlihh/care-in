@@ -36,7 +36,7 @@ const StyledHeader = (props) => {
     >
       <ImageBackground
         style={styles.background}
-        source={require('../../../../assets/WavyBackground.png')}
+        source={require('../../../../assets/images/WavyBackground.png')}
       />
       <View style={styles.textBundle}>
         <Icon

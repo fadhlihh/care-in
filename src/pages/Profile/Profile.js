@@ -65,6 +65,12 @@ const Profile = (props) => {
           username={user.username}
           onEditPress={() => Actions.editProfile({ id: user.id })}
           onBackPress={() => Actions.pop()}
+          pictureSource={{
+            uri:
+              userType === UserType.PATIENT
+                ? 'https://www.cornwallbusinessawards.co.uk/wp-content/uploads/2017/11/dummy450x450.jpg'
+                : StringBuilder.addBaseURL(user.foto)
+          }}
         />
         {isLoaded ? (
           <View style={styles.containter}>
